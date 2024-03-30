@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [release/v1.20.1-1.65.0] - 2024-03-30
+### :bug: Bug Fixes
+- [`a089e2b`](https://github.com/klikli-dev/modonomicon/commit/a089e2bdb81f19aa20dfbe239b149da30e0ec73b) - fixed typo in recipe error message + Fixed book not loading when an entry has an invalid parent *(PR [#190](https://github.com/klikli-dev/modonomicon/pull/190) by [@DaFuqs](https://github.com/DaFuqs))*
+
+
 ## [release/v1.20.1-1.64.0] - 2024-03-28
 ### :sparkles: New Features
 - [`1b4b696`](https://github.com/klikli-dev/modonomicon/commit/1b4b696f1c1549354ea81e9f065432174a446aad) - update to latest commonmark *(commit by [@klikli-dev](https://github.com/klikli-dev))*
@@ -718,3 +723,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [release/v1.20.1-1.62.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.61.1...release/v1.20.1-1.62.0
 [release/v1.20.1-1.63.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.62.0...release/v1.20.1-1.63.0
 [release/v1.20.1-1.64.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.63.0...release/v1.20.1-1.64.0
+[release/v1.20.1-1.65.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.64.0...release/v1.20.1-1.65.0
