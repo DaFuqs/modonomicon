@@ -6,8 +6,7 @@
 
 package com.klikli_dev.modonomicon.book;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.klikli_dev.modonomicon.book.conditions.BookCondition;
 import com.klikli_dev.modonomicon.book.conditions.BookNoneCondition;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
@@ -198,7 +197,11 @@ public class BookEntry {
         var newParents = new ArrayList<BookEntryParent>();
         for (var parent : this.getParents()) {
             var parentEntry = this.book.getEntry(parent.getEntryId());
-            newParents.add(new ResolvedBookEntryParent(parent, parentEntry));
+            if(parentEntry == null) {
+                BookErrorManager.get().error("Entry \"" + this.getId() + "\" has a parent that does not exist in this book: \"" + parent.getEntryId() + "\". This parent will be ignored");
+            } else {
+                newParents.add(new ResolvedBookEntryParent(parent, parentEntry));
+            }
         }
         this.parents = newParents;
 
