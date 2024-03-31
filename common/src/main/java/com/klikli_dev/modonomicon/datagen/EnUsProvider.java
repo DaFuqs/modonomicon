@@ -70,6 +70,8 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
 
         //Tooltip
         this.add(Tooltips.CONDITION_ADVANCEMENT, "Requires Advancement: %s");
+        this.add(Tooltips.CONDITION_ADVANCEMENT_LOADING, "Loading ...");
+        this.add(Tooltips.CONDITION_ADVANCEMENT_HIDDEN, "Hidden Advancement");
         this.add(Tooltips.CONDITION_ENTRY_UNLOCKED, "Requires unlocked Entry: %s");
         this.add(Tooltips.CONDITION_ENTRY_READ, "Requires read Entry: %s\nHint: Mark all entries as read with the \"eye\" button at the top right.");
         this.add(Tooltips.ITEM_NO_BOOK_FOUND_FOR_STACK, "No book found for this item in the modonomicon book database! Nbt: %s");
@@ -157,6 +159,9 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.entryName(), "Condition Root Entry");
         this.add(helper.entryDescription(), "Condition Root Entry");
 
+        helper.entry("condition_advancement");
+        this.add(helper.entryName(), "Advancement Condition");
+        this.add(helper.entryDescription(), "Depends on an advancement being unlocked.");
 
         helper.entry("condition_level_1");
         helper.page("info");
