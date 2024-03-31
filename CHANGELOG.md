@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [release/v1.20.1-1.66.5] - 2024-03-31
+### :bug: Bug Fixes
+- [`ac124fc`](https://github.com/klikli-dev/modonomicon/commit/ac124fc3147a095ce7b233775bcfb24b6dfb762d) - run missing datagen for forge *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+
 ## [release/v1.20.1-1.66.4] - 2024-03-31
 ### :bug: Bug Fixes
 - [`077ab13`](https://github.com/klikli-dev/modonomicon/commit/077ab131d9df9eae2a103a921088ee54edb3fe8a) - Added missing lang for condition.mod_loaded ([#193](https://github.com/klikli-dev/modonomicon/pull/193))  - thanks @DaFuqs *(commit by [@DaFuqs](https://github.com/DaFuqs))*
@@ -754,3 +759,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [release/v1.20.1-1.66.2]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.66.1...release/v1.20.1-1.66.2
 [release/v1.20.1-1.66.3]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.66.2...release/v1.20.1-1.66.3
 [release/v1.20.1-1.66.4]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.66.3...release/v1.20.1-1.66.4
+[release/v1.20.1-1.66.5]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.66.4...release/v1.20.1-1.66.5
