@@ -95,6 +95,8 @@ public class ModonomiconConstants {
             public static final ResourceLocation ENTRY_UNLOCKED = new ResourceLocation(ModonomiconAPI.ID, "entry_unlocked");
 
             public static final ResourceLocation ENTRY_READ = new ResourceLocation(ModonomiconAPI.ID, "entry_read");
+            
+            public static final ResourceLocation CATEGORY_HAS_ENTRIES = new ResourceLocation(ModonomiconAPI.ID, "category_has_entries");
         }
     }
 
@@ -179,6 +181,7 @@ public class ModonomiconConstants {
             public static final String CONDITION_ADVANCEMENT_HIDDEN = CONDITION_ADVANCEMENT + ".hidden";
             public static final String CONDITION_MOD_LOADED = CONDITION_PREFIX + "mod_loaded";
             public static final String CONDITION_ENTRY_UNLOCKED = CONDITION_PREFIX + "entry_unlocked";
+            public static final String CONDITION_CATEGORY_HAS_ENTRIES = CONDITION_PREFIX + "has_entries";
             public static final String CONDITION_ENTRY_READ = CONDITION_PREFIX + "entry_read";
             public static final String RECIPE_PREFIX = PREFIX + ".recipe.";
             public static final String RECIPE_CRAFTING_SHAPELESS = RECIPE_PREFIX + "crafting_shapeless";

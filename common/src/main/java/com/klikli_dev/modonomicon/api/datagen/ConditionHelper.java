@@ -34,6 +34,13 @@ public class ConditionHelper {
         return BookEntryReadConditionModel.builder().withEntry(entry.getId());
     }
 
+    public BookCategoryHasEntriesConditionModel categoryHasEntries(BookEntryModel entry) {
+        return BookCategoryHasEntriesConditionModel.builder().withCategory(entry.getId()).build();
+    }
+    public BookCategoryHasEntriesConditionModel.Builder categoryHasEntriesBuilder(BookEntryModel entry) {
+        return BookCategoryHasEntriesConditionModel.builder().withCategory(entry.getId());
+    }
+
     public BookAndConditionModel and(BookConditionModel... children) {
         return BookAndConditionModel.builder().withChildren(children).build();
     }
