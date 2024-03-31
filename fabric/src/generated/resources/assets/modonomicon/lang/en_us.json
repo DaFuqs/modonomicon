@@ -186,6 +186,7 @@
   "tooltip.modonomicon..condition.entry_read": "Requires read Entry: %s\nHint: Mark all entries as read with the \"eye\" button at the top right.",
   "tooltip.modonomicon..condition.entry_unlocked": "Requires unlocked Entry: %s",
   "tooltip.modonomicon..condition.has_entries": "Requires that category %s has loaded entries",
+  "tooltip.modonomicon..condition.mod_loaded": "Requires loaded mod: %s",
   "tooltip.modonomicon..recipe.crafting_shapeless": "Shapeless",
   "tooltip.modonomicon.fluid.amount": "%s mb",
   "tooltip.modonomicon.fluid.amount_and_capacity": "%s / %s mb",
