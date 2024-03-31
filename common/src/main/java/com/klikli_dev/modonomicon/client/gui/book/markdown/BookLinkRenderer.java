@@ -9,6 +9,7 @@ package com.klikli_dev.modonomicon.client.gui.book.markdown;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.I18n.Gui;
 import com.klikli_dev.modonomicon.book.BookLink;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
+import com.klikli_dev.modonomicon.data.BookDataManager;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
@@ -30,17 +31,18 @@ public class BookLinkRenderer implements LinkRenderer {
             );
 
             var bookLink = BookLink.from(context.getBook(), link.getDestination());
-            var goToText = "book." + bookLink.bookId.toString().replace(":", ".") + ".name";
+            var book = BookDataManager.get().getBook(bookLink.bookId);
+            var goToText = Component.translatable(book.getName());
             if (bookLink.categoryId != null) {
-                goToText = "book." + bookLink.bookId.toString().replace(":", ".") + "."
-                        + bookLink.categoryId.getPath().replace(":", ".").replace("/", ".") + ".name";
+                var category = book.getCategory(bookLink.categoryId);
+                goToText = Component.translatable(category.getName());
             }
             if (bookLink.entryId != null) {
-                goToText = "book." + bookLink.bookId.toString().replace(":", ".") + "."
-                        + bookLink.entryId.getPath().replace(":", ".").replace("/", ".") + ".name";
+                var entry = book.getEntry(bookLink.entryId);
+                goToText = Component.translatable(entry.getName());
             }
             //Note: if we ever change this we need to adjust renderComponentHoverEffect
-            var hoverComponent = Component.translatable(Gui.HOVER_BOOK_LINK, Component.translatable(goToText));
+            var hoverComponent = Component.translatable(Gui.HOVER_BOOK_LINK, goToText);
 
 
             //if we have a color we use it, otherwise we use link default.
