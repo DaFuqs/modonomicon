@@ -75,25 +75,25 @@ public class EntryConnectionRenderer {
     public void renderSmallCurvesReversed(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent) {
         this.drawHorizontalLine(guiGraphics, entry.getY(), entry.getX(), parentEntry.getX());
         this.drawVerticalLine(guiGraphics, parentEntry.getX(), parentEntry.getY(), entry.getY());
-        if (entry.getX() > parentEntry.getX()) {
+        if (entry.getX() < parentEntry.getX()) {
+            if (entry.getY() > parentEntry.getY()) {
+                this.drawSmallCurveLeftUp(guiGraphics, parentEntry.getX(), entry.getY());
+                if (parent.drawArrow())
+                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+            } else {
+                this.drawSmallCurveLeftDown(guiGraphics, parentEntry.getX(), entry.getY());
+                if (parent.drawArrow())
+                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+            }
+        } else {
             if (entry.getY() > parentEntry.getY()) {
                 this.drawSmallCurveRightUp(guiGraphics, parentEntry.getX(), entry.getY());
                 if (parent.drawArrow())
                     this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
             } else {
-                this.drawSmallCurveRightDown(guiGraphics, entry.getX() - 1, parentEntry.getY() - 1);
+                this.drawSmallCurveRightDown(guiGraphics, parentEntry.getX(), entry.getY());
                 if (parent.drawArrow())
                     this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
-            }
-        } else {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawSmallCurveLeftUp(guiGraphics, parentEntry.getX(), parentEntry.getY() + 1);
-                if (parent.drawArrow())
-                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
-            } else {
-                this.drawSmallCurveLeftDown(guiGraphics, entry.getX() + 1, parentEntry.getY() - 1);
-                if (parent.drawArrow())
-                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
             }
         }
     }
