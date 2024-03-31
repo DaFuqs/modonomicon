@@ -31,8 +31,7 @@ public class BookModLoadedCondition extends BookCondition {
         var modId = GsonHelper.getAsString(json, "mod_id");
 
         //default tooltip
-        var tooltip = Component.translatable(Tooltips.CONDITION_MOD_LOADED,
-                "mods." + modId + ".name");
+        var tooltip = Component.translatable(Tooltips.CONDITION_MOD_LOADED, modId);
 
         if (json.has("tooltip")) {
             tooltip = tooltipFromJson(json);
