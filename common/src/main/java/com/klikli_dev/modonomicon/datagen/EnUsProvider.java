@@ -159,6 +159,9 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.entryName(), "Condition Root Entry");
         this.add(helper.entryDescription(), "Condition Root Entry");
 
+        helper.entry("condition_advancement");
+        this.add(helper.entryName(), "Advancement Condition");
+        this.add(helper.entryDescription(), "Depends on an advancement being unlocked.");
 
         helper.entry("condition_level_1");
         helper.page("info");
