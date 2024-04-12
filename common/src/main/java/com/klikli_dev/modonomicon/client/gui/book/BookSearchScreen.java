@@ -33,11 +33,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class BookSearchScreen extends Screen implements BookScreenWithButtons {
+public class BookSearchScreen extends BookPaginatedScreen {
     public static final int ENTRIES_PER_PAGE = 13;
     public static final int ENTRIES_IN_FIRST_PAGE = 11;
     protected final List<Button> entryButtons = new ArrayList<>();
-    private final BookOverviewScreen parentScreen;
     private final List<BookEntry> visibleEntries = new ArrayList<>();
     /**
      * The index of the two pages being displayed. 0 means Pages 0 and 1, 1 means Pages 2 and 3, etc.
@@ -47,15 +46,11 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
     private List<BookEntry> allEntries;
     private EditBox searchField;
     private BookTextHolder infoText;
-    private int bookLeft;
-    private int bookTop;
 
     private List<Component> tooltip;
 
     protected BookSearchScreen(BookOverviewScreen parentScreen) {
-        super(Component.translatable(Gui.SEARCH_SCREEN_TITLE));
-
-        this.parentScreen = parentScreen;
+        super(Component.translatable(Gui.SEARCH_SCREEN_TITLE), parentScreen);
         this.infoText = new BookTextHolder(Gui.SEARCH_INFO_TEXT);
     }
 
@@ -85,18 +80,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
     public boolean canSeeArrowButton(boolean left) {
         return left ? this.openPagesIndex > 0 : (this.openPagesIndex + 1) < this.maxOpenPagesIndex;
-    }
-
-    /**
-     * Needs to use Button instead of ArrowButton to conform to Button.OnPress otherwise we can't use it as method
-     * reference, which we need - lambda can't use this in super constructor call.
-     */
-    public void handleArrowButton(Button button) {
-        this.flipPage(((ArrowButton) button).left, true);
-    }
-
-    public void handleExitButton(Button button) {
-        this.onClose();
     }
 
     protected void flipPage(boolean left, boolean playSound) {
@@ -183,13 +166,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
     private List<BookEntry> getEntries() {
         return this.parentScreen.getBook().getEntries().values().stream().toList();
-    }
-
-    private boolean clickOutsideEntry(double pMouseX, double pMouseY) {
-        return pMouseX < this.bookLeft - BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseX > this.bookLeft + BookContentScreen.FULL_WIDTH + BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseY < this.bookTop - BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseY > this.bookTop + BookContentScreen.FULL_HEIGHT + BookContentScreen.CLICK_SAFETY_MARGIN;
     }
 
     @Override
@@ -289,9 +265,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
     public void init() {
         super.init();
 
-        this.bookLeft = (this.width - BookContentScreen.BOOK_BACKGROUND_WIDTH) / 2;
-        this.bookTop = (this.height - BookContentScreen.BOOK_BACKGROUND_HEIGHT) / 2;
-
         var textRenderer = new BookTextRenderer(this.getBook());
         this.prerenderMarkdown(textRenderer);
 
@@ -305,17 +278,12 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
         this.createSearchBar();
         this.createEntryList();
-
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft - 4, this.bookTop + BookContentScreen.FULL_HEIGHT - 6, true, () -> this.canSeeArrowButton(true), this::handleArrowButton));
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft + BookContentScreen.FULL_WIDTH - 14, this.bookTop + BookContentScreen.FULL_HEIGHT - 6, false, () -> this.canSeeArrowButton(false), this::handleArrowButton));
-        this.addRenderableWidget(new ExitButton(this, this.bookLeft + BookContentScreen.FULL_WIDTH - 10, this.bookTop - 2, this::handleExitButton));
     }
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-
-        if (this.clickOutsideEntry(pMouseX, pMouseY)) {
-            this.onClose();
+        if(super.mouseClicked(pMouseX, pMouseY, pButton)) {
+            return true;
         }
 
         return this.searchField.mouseClicked(pMouseX - this.bookLeft, pMouseY - this.bookTop, pButton) || super.mouseClicked(pMouseX, pMouseY, pButton);
