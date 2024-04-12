@@ -321,8 +321,7 @@ public class BookContentScreen extends BookPaginatedScreen {
         if (leftPageClickedStyle != null) {
             return leftPageClickedStyle;
         }
-        var rightPageClickedStyle = this.getClickedComponentStyleAtForPage(this.rightPageRenderer, pMouseX, pMouseY);
-        return rightPageClickedStyle;
+		return this.getClickedComponentStyleAtForPage(this.rightPageRenderer, pMouseX, pMouseY);
     }
 
     public int getBookLeft() {
@@ -340,40 +339,15 @@ public class BookContentScreen extends BookPaginatedScreen {
         this.narratables.removeIf(n -> n instanceof Renderable && renderables.contains(n));
     }
 
-    private int getCurrentPageIndex() {
-        return this.leftPage != null ? this.leftPage.getPageNumber()
-                : this.rightPage != null ? this.rightPage.getPageNumber()
-                : 0;
-    }
-
     protected void flipPage(boolean left, boolean playSound) {
         if (this.canSeeArrowButton(left)) {
-
-            var currentPageIndex = this.unlockedPages.get(this.openPagesIndex).getPageNumber();
-
+            
             if (left) {
                 this.openPagesIndex -= 2;
             } else {
                 this.openPagesIndex += 2;
             }
-
-            var newPageIndex = this.unlockedPages.get(this.openPagesIndex).getPageNumber();
-
-            if (BookGuiManager.get().getHistorySize() > 0) {
-                var lastPage = BookGuiManager.get().peekHistory();
-                if (lastPage.bookId == this.entry.getBook().getId() && lastPage.entryId == this.entry.getId() && lastPage.page == newPageIndex) {
-                    //if we're flipping back to the last page in the history, don't add a new history entry,
-                    // and remove the old one to avoid weird back-and-forth jumps when using the back button
-                    BookGuiManager.get().popHistory();
-                } else {
-                    //if we flip to a new page, add a new history entry for the page we were on before flipping
-                    BookGuiManager.get().pushHistory(this.entry.getBook().getId(), this.entry.getCategory().getId(), this.entry.getId(), currentPageIndex);
-                }
-            } else {
-                //if we don't have any history, add a new history entry for the page we were on before flipping
-                BookGuiManager.get().pushHistory(this.entry.getBook().getId(), this.entry.getCategory().getId(), this.entry.getId(), currentPageIndex);
-            }
-
+            
             this.onPageChanged();
             if (playSound) {
                 playTurnPageSound(this.getBook());
