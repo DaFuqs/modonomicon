@@ -49,7 +49,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
@@ -332,8 +332,7 @@ public class BookContentScreen extends BookPaginatedScreen {
         return this.bookTop;
     }
 
-    @SuppressWarnings("unchecked")
-    public void removeRenderableWidgets(Collection<? extends Renderable> renderables) {
+    public void removeRenderableWidgets(@NotNull Collection<? extends Renderable> renderables) {
         this.renderables.removeIf(renderables::contains);
         this.children().removeIf(c -> c instanceof Renderable && renderables.contains(c));
         this.narratables.removeIf(n -> n instanceof Renderable && renderables.contains(n));
