@@ -8,30 +8,24 @@
 package com.klikli_dev.modonomicon.client.gui.book;
 
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.I18n.Gui;
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookEntry;
-import com.klikli_dev.modonomicon.book.BookTextHolder;
-import com.klikli_dev.modonomicon.book.RenderedBookTextHolder;
-import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
-import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
-import com.klikli_dev.modonomicon.client.gui.book.button.ArrowButton;
-import com.klikli_dev.modonomicon.client.gui.book.button.EntryListButton;
-import com.klikli_dev.modonomicon.client.gui.book.button.ExitButton;
-import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
-import com.klikli_dev.modonomicon.client.render.page.BookPageRenderer;
-import com.klikli_dev.modonomicon.util.GuiGraphicsExt;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.bookstate.*;
+import com.klikli_dev.modonomicon.client.gui.*;
+import com.klikli_dev.modonomicon.client.gui.book.button.*;
+import com.klikli_dev.modonomicon.client.gui.book.markdown.*;
+import com.klikli_dev.modonomicon.client.render.page.*;
+import com.klikli_dev.modonomicon.platform.*;
+import com.klikli_dev.modonomicon.util.*;
+import com.mojang.blaze3d.platform.*;
+import com.mojang.blaze3d.systems.*;
+import net.minecraft.client.*;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.components.*;
+import net.minecraft.client.resources.language.*;
+import net.minecraft.network.chat.*;
+import org.lwjgl.glfw.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class BookSearchScreen extends BookPaginatedScreen {
     public static final int ENTRIES_PER_PAGE = 13;
@@ -238,6 +232,17 @@ public class BookSearchScreen extends BookPaginatedScreen {
         super.render(guiGraphics, pMouseX, pMouseY, pPartialTick);
 
         this.drawTooltip(guiGraphics, pMouseX, pMouseY);
+    }
+    
+    
+    @Override
+    public void onClose() {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_ESCAPE)) {
+            super.onClose();
+            this.parentScreen.onClose();
+        } else {
+            ClientServices.GUI.popGuiLayer(); //instead of super.onClose() to restore our parent screen
+        }
     }
 
     @Override

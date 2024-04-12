@@ -152,21 +152,6 @@ public class BookContentScreen extends BookPaginatedScreen {
         return left ? this.openPagesIndex > 0 : (this.openPagesIndex + 2) < this.unlockedPages.size();
     }
 
-    public boolean canSeeBackButton() {
-        return BookGuiManager.get().getHistorySize() > 0;
-    }
-
-    public void handleBackButton(Button button) {
-        this.back();
-    }
-
-    public void back() {
-        if (BookGuiManager.get().getHistorySize() > 0) {
-            var lastPage = BookGuiManager.get().popHistory();
-            BookGuiManager.get().openEntry(lastPage.bookId, lastPage.categoryId, lastPage.entryId, lastPage.page);
-        }
-    }
-
     public void setTooltip(Component... strings) {
         this.setTooltip(List.of(strings));
     }
