@@ -49,32 +49,26 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class BookContentScreen extends Screen implements BookScreenWithButtons {
-
-    public static final int BOOK_BACKGROUND_WIDTH = 272;
-    public static final int BOOK_BACKGROUND_HEIGHT = 178;
+public class BookContentScreen extends BookPaginatedScreen {
 
     public static final int TOP_PADDING = 15;
     public static final int LEFT_PAGE_X = 12;
     public static final int RIGHT_PAGE_X = 141;
     public static final int PAGE_WIDTH = 124;
     public static final int PAGE_HEIGHT = 128; //TODO: Adjust to what is real
-    public static final int FULL_WIDTH = 272;
-    public static final int FULL_HEIGHT = 180;
 
     public static final int MAX_TITLE_WIDTH = PAGE_WIDTH - 4;
 
     public static final int CLICK_SAFETY_MARGIN = 20;
 
     private static long lastTurnPageSoundTime;
-    private final BookOverviewScreen parentScreen;
     private final BookEntry entry;
     private final ResourceLocation bookContentTexture;
     public int ticksInBook;
@@ -84,8 +78,6 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
     private BookPage rightPage;
     private BookPageRenderer<?> leftPageRenderer;
     private BookPageRenderer<?> rightPageRenderer;
-    private int bookLeft;
-    private int bookTop;
     /**
      * The index of the leftmost unlocked page being displayed.
      */
@@ -97,11 +89,10 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
     private boolean isHoveringItemLink;
 
     public BookContentScreen(BookOverviewScreen parentScreen, BookEntry entry) {
-        super(Component.literal(""));
+        super(Component.literal(""), parentScreen);
 
         this.minecraft = Minecraft.getInstance();
 
-        this.parentScreen = parentScreen;
         this.entry = entry;
 
         this.bookContentTexture = this.parentScreen.getBook().getBookContentTexture();
@@ -159,33 +150,6 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
 
     public boolean canSeeArrowButton(boolean left) {
         return left ? this.openPagesIndex > 0 : (this.openPagesIndex + 2) < this.unlockedPages.size();
-    }
-
-    public boolean canSeeBackButton() {
-        return BookGuiManager.get().getHistorySize() > 0;
-    }
-
-    /**
-     * Needs to use Button instead of ArrowButton to conform to Button.OnPress otherwise we can't use it as method
-     * reference, which we need - lambda can't use this in super constructor call.
-     */
-    public void handleArrowButton(Button button) {
-        this.flipPage(((ArrowButton) button).left, true);
-    }
-
-    public void handleBackButton(Button button) {
-        this.back();
-    }
-
-    public void back() {
-        if (BookGuiManager.get().getHistorySize() > 0) {
-            var lastPage = BookGuiManager.get().popHistory();
-            BookGuiManager.get().openEntry(lastPage.bookId, lastPage.categoryId, lastPage.entryId, lastPage.page);
-        }
-    }
-
-    public void handleExitButton(Button button) {
-        this.onClose();
     }
 
     public void setTooltip(Component... strings) {
@@ -342,8 +306,7 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
         if (leftPageClickedStyle != null) {
             return leftPageClickedStyle;
         }
-        var rightPageClickedStyle = this.getClickedComponentStyleAtForPage(this.rightPageRenderer, pMouseX, pMouseY);
-        return rightPageClickedStyle;
+		return this.getClickedComponentStyleAtForPage(this.rightPageRenderer, pMouseX, pMouseY);
     }
 
     public int getBookLeft() {
@@ -354,47 +317,21 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
         return this.bookTop;
     }
 
-    @SuppressWarnings("unchecked")
-    public void removeRenderableWidgets(Collection<? extends Renderable> renderables) {
+    public void removeRenderableWidgets(@NotNull Collection<? extends Renderable> renderables) {
         this.renderables.removeIf(renderables::contains);
         this.children().removeIf(c -> c instanceof Renderable && renderables.contains(c));
         this.narratables.removeIf(n -> n instanceof Renderable && renderables.contains(n));
     }
 
-    private int getCurrentPageIndex() {
-        return this.leftPage != null ? this.leftPage.getPageNumber()
-                : this.rightPage != null ? this.rightPage.getPageNumber()
-                : 0;
-    }
-
     protected void flipPage(boolean left, boolean playSound) {
         if (this.canSeeArrowButton(left)) {
-
-            var currentPageIndex = this.unlockedPages.get(this.openPagesIndex).getPageNumber();
-
+            
             if (left) {
                 this.openPagesIndex -= 2;
             } else {
                 this.openPagesIndex += 2;
             }
-
-            var newPageIndex = this.unlockedPages.get(this.openPagesIndex).getPageNumber();
-
-            if (BookGuiManager.get().getHistorySize() > 0) {
-                var lastPage = BookGuiManager.get().peekHistory();
-                if (lastPage.bookId == this.entry.getBook().getId() && lastPage.entryId == this.entry.getId() && lastPage.page == newPageIndex) {
-                    //if we're flipping back to the last page in the history, don't add a new history entry,
-                    // and remove the old one to avoid weird back-and-forth jumps when using the back button
-                    BookGuiManager.get().popHistory();
-                } else {
-                    //if we flip to a new page, add a new history entry for the page we were on before flipping
-                    BookGuiManager.get().pushHistory(this.entry.getBook().getId(), this.entry.getCategory().getId(), this.entry.getId(), currentPageIndex);
-                }
-            } else {
-                //if we don't have any history, add a new history entry for the page we were on before flipping
-                BookGuiManager.get().pushHistory(this.entry.getBook().getId(), this.entry.getCategory().getId(), this.entry.getId(), currentPageIndex);
-            }
-
+            
             this.onPageChanged();
             if (playSound) {
                 playTurnPageSound(this.getBook());
@@ -474,13 +411,6 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
         this.tooltipFluidStack = null;
     }
 
-    private boolean clickOutsideEntry(double pMouseX, double pMouseY) {
-        return pMouseX < this.bookLeft - CLICK_SAFETY_MARGIN
-                || pMouseX > this.bookLeft + FULL_WIDTH + CLICK_SAFETY_MARGIN
-                || pMouseY < this.bookTop - CLICK_SAFETY_MARGIN
-                || pMouseY > this.bookTop + FULL_HEIGHT + CLICK_SAFETY_MARGIN;
-    }
-
     private void loadEntryState() {
         var state = BookVisualStateManager.get().getEntryStateFor(this.parentScreen.getMinecraft().player, this.entry);
 
@@ -520,11 +450,6 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
 
         //do not translate tooltip, would mess up location
         this.drawTooltip(guiGraphics, pMouseX, pMouseY);
-    }
-
-    @Override
-    public boolean shouldCloseOnEsc() {
-        return true;
     }
 
     @Override
@@ -848,16 +773,10 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
     protected void init() {
         super.init();
 
-        this.bookLeft = (this.width - BOOK_BACKGROUND_WIDTH) / 2;
-        this.bookTop = (this.height - BOOK_BACKGROUND_HEIGHT) / 2;
-
         this.unlockedPages = this.entry.getUnlockedPagesFor(this.minecraft.player);
         this.beginDisplayPages();
 
         this.addRenderableWidget(new BackButton(this, this.width / 2 - BackButton.WIDTH / 2, this.bookTop + FULL_HEIGHT - BackButton.HEIGHT / 2));
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft - 4, this.bookTop + FULL_HEIGHT - 6, true, () -> this.canSeeArrowButton(true), this::handleArrowButton));
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft + FULL_WIDTH - 14, this.bookTop + FULL_HEIGHT - 6, false, () -> this.canSeeArrowButton(false), this::handleArrowButton));
-        this.addRenderableWidget(new ExitButton(this, this.bookLeft + FULL_WIDTH - 10, this.bookTop - 2, this::handleExitButton));
     }
 
     @Override
@@ -878,40 +797,13 @@ public class BookContentScreen extends Screen implements BookScreenWithButtons {
             }
         }
 
-        if (pButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            this.onClose();
+        if(super.mouseClicked(pMouseX, pMouseY, pButton)) {
             return true;
         }
 
         var clickPage = this.clickPage(this.leftPageRenderer, pMouseX, pMouseY, pButton)
                 || this.clickPage(this.rightPageRenderer, pMouseX, pMouseY, pButton);
 
-
-        if (this.clickOutsideEntry(pMouseX, pMouseY)) {
-            this.onClose();
-        }
-
         return clickPage || super.mouseClicked(pMouseX, pMouseY, pButton);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (delta < 0) {
-            this.flipPage(false, true);
-        } else if (delta > 0) {
-            this.flipPage(true, true);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
-            this.back();
-            return true;
-        }
-
-        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 }

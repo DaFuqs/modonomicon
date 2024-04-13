@@ -8,36 +8,29 @@
 package com.klikli_dev.modonomicon.client.gui.book;
 
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.I18n.Gui;
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookEntry;
-import com.klikli_dev.modonomicon.book.BookTextHolder;
-import com.klikli_dev.modonomicon.book.RenderedBookTextHolder;
-import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
-import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
-import com.klikli_dev.modonomicon.client.gui.book.button.ArrowButton;
-import com.klikli_dev.modonomicon.client.gui.book.button.EntryListButton;
-import com.klikli_dev.modonomicon.client.gui.book.button.ExitButton;
-import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
-import com.klikli_dev.modonomicon.client.render.page.BookPageRenderer;
-import com.klikli_dev.modonomicon.util.GuiGraphicsExt;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.bookstate.*;
+import com.klikli_dev.modonomicon.client.gui.*;
+import com.klikli_dev.modonomicon.client.gui.book.button.*;
+import com.klikli_dev.modonomicon.client.gui.book.markdown.*;
+import com.klikli_dev.modonomicon.client.render.page.*;
+import com.klikli_dev.modonomicon.platform.*;
+import com.klikli_dev.modonomicon.util.*;
+import com.mojang.blaze3d.platform.*;
+import com.mojang.blaze3d.systems.*;
+import net.minecraft.client.*;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.components.*;
+import net.minecraft.client.resources.language.*;
+import net.minecraft.network.chat.*;
+import org.lwjgl.glfw.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class BookSearchScreen extends Screen implements BookScreenWithButtons {
+public class BookSearchScreen extends BookPaginatedScreen {
     public static final int ENTRIES_PER_PAGE = 13;
     public static final int ENTRIES_IN_FIRST_PAGE = 11;
     protected final List<Button> entryButtons = new ArrayList<>();
-    private final BookOverviewScreen parentScreen;
     private final List<BookEntry> visibleEntries = new ArrayList<>();
     /**
      * The index of the two pages being displayed. 0 means Pages 0 and 1, 1 means Pages 2 and 3, etc.
@@ -47,15 +40,11 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
     private List<BookEntry> allEntries;
     private EditBox searchField;
     private BookTextHolder infoText;
-    private int bookLeft;
-    private int bookTop;
 
     private List<Component> tooltip;
 
     protected BookSearchScreen(BookOverviewScreen parentScreen) {
-        super(Component.translatable(Gui.SEARCH_SCREEN_TITLE));
-
-        this.parentScreen = parentScreen;
+        super(Component.translatable(Gui.SEARCH_SCREEN_TITLE), parentScreen);
         this.infoText = new BookTextHolder(Gui.SEARCH_INFO_TEXT);
     }
 
@@ -85,18 +74,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
     public boolean canSeeArrowButton(boolean left) {
         return left ? this.openPagesIndex > 0 : (this.openPagesIndex + 1) < this.maxOpenPagesIndex;
-    }
-
-    /**
-     * Needs to use Button instead of ArrowButton to conform to Button.OnPress otherwise we can't use it as method
-     * reference, which we need - lambda can't use this in super constructor call.
-     */
-    public void handleArrowButton(Button button) {
-        this.flipPage(((ArrowButton) button).left, true);
-    }
-
-    public void handleExitButton(Button button) {
-        this.onClose();
     }
 
     protected void flipPage(boolean left, boolean playSound) {
@@ -185,13 +162,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
         return this.parentScreen.getBook().getEntries().values().stream().toList();
     }
 
-    private boolean clickOutsideEntry(double pMouseX, double pMouseY) {
-        return pMouseX < this.bookLeft - BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseX > this.bookLeft + BookContentScreen.FULL_WIDTH + BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseY < this.bookTop - BookContentScreen.CLICK_SAFETY_MARGIN
-                || pMouseY > this.bookTop + BookContentScreen.FULL_HEIGHT + BookContentScreen.CLICK_SAFETY_MARGIN;
-    }
-
     @Override
     public void setTooltip(List<Component> tooltip) {
         this.tooltip = tooltip;
@@ -263,6 +233,17 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
         this.drawTooltip(guiGraphics, pMouseX, pMouseY);
     }
+    
+    
+    @Override
+    public void onClose() {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_ESCAPE)) {
+            super.onClose();
+            this.parentScreen.onClose();
+        } else {
+            ClientServices.GUI.popGuiLayer(); //instead of super.onClose() to restore our parent screen
+        }
+    }
 
     @Override
     public boolean keyPressed(int key, int scanCode, int modifiers) {
@@ -289,9 +270,6 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
     public void init() {
         super.init();
 
-        this.bookLeft = (this.width - BookContentScreen.BOOK_BACKGROUND_WIDTH) / 2;
-        this.bookTop = (this.height - BookContentScreen.BOOK_BACKGROUND_HEIGHT) / 2;
-
         var textRenderer = new BookTextRenderer(this.getBook());
         this.prerenderMarkdown(textRenderer);
 
@@ -305,17 +283,12 @@ public class BookSearchScreen extends Screen implements BookScreenWithButtons {
 
         this.createSearchBar();
         this.createEntryList();
-
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft - 4, this.bookTop + BookContentScreen.FULL_HEIGHT - 6, true, () -> this.canSeeArrowButton(true), this::handleArrowButton));
-        this.addRenderableWidget(new ArrowButton(this, this.bookLeft + BookContentScreen.FULL_WIDTH - 14, this.bookTop + BookContentScreen.FULL_HEIGHT - 6, false, () -> this.canSeeArrowButton(false), this::handleArrowButton));
-        this.addRenderableWidget(new ExitButton(this, this.bookLeft + BookContentScreen.FULL_WIDTH - 10, this.bookTop - 2, this::handleExitButton));
     }
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-
-        if (this.clickOutsideEntry(pMouseX, pMouseY)) {
-            this.onClose();
+        if(super.mouseClicked(pMouseX, pMouseY, pButton)) {
+            return true;
         }
 
         return this.searchField.mouseClicked(pMouseX - this.bookLeft, pMouseY - this.bookTop, pButton) || super.mouseClicked(pMouseX, pMouseY, pButton);
