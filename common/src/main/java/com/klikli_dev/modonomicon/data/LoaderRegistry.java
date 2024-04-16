@@ -22,25 +22,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LoaderRegistry {
 
-    private static final Map<ResourceLocation, JsonLoader<? extends BookPage>> pageJsonLoaders = new HashMap<>();
-    private static final Map<ResourceLocation, NetworkLoader<? extends BookPage>> pageNetworkLoaders = new HashMap<>();
+    private static final Map<ResourceLocation, JsonLoader<? extends BookPage>> pageJsonLoaders = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, NetworkLoader<? extends BookPage>> pageNetworkLoaders = new ConcurrentHashMap<>();
 
-    private static final Map<ResourceLocation, JsonLoader<? extends BookCondition>> conditionJsonLoaders = new HashMap<>();
+    private static final Map<ResourceLocation, JsonLoader<? extends BookCondition>> conditionJsonLoaders = new ConcurrentHashMap<>();
 
-    private static final Map<ResourceLocation, NetworkLoader<? extends BookCondition>> conditionNetworkLoaders = new HashMap<>();
-    private static final Map<ResourceLocation, JsonLoader<? extends Multiblock>> multiblockJsonLoaders = new HashMap<>();
-    private static final Map<ResourceLocation, NetworkLoader<? extends Multiblock>> multiblockNetworkLoaders = new HashMap<>();
+    private static final Map<ResourceLocation, NetworkLoader<? extends BookCondition>> conditionNetworkLoaders = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, JsonLoader<? extends Multiblock>> multiblockJsonLoaders = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, NetworkLoader<? extends Multiblock>> multiblockNetworkLoaders = new ConcurrentHashMap<>();
 
-    private static final Map<ResourceLocation, JsonLoader<? extends StateMatcher>> stateMatcherJsonLoaders = new HashMap<>();
-    private static final Map<ResourceLocation, NetworkLoader<? extends StateMatcher>> stateMatcherNetworkLoaders = new HashMap<>();
+    private static final Map<ResourceLocation, JsonLoader<? extends StateMatcher>> stateMatcherJsonLoaders = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, NetworkLoader<? extends StateMatcher>> stateMatcherNetworkLoaders = new ConcurrentHashMap<>();
 
 
-    private static final Map<ResourceLocation, TriPredicate<BlockGetter, BlockPos, BlockState>> predicates = new HashMap<>();
+    private static final Map<ResourceLocation, TriPredicate<BlockGetter, BlockPos, BlockState>> predicates = new ConcurrentHashMap<>();
 
     /**
      * Call from common setup
