@@ -189,8 +189,11 @@ public class BookGuiManager {
                 ClientServices.GUI.pushGuiLayer(this.currentContentScreen);
         }
 
-        //we don't need to manually check for the current page because the content screen will do that for us
-        this.currentContentScreen.goToPage(page, false);
+        //we need to check for null, because this.currentCategoryScreen.openEntry(entry); returns null for "redirect" entries that open categories - because there is no content to show.
+        if(this.currentContentScreen != null) {
+            //we don't need to manually check for the current page because the content screen will do that for us
+            this.currentContentScreen.goToPage(page, false);
+        }
         //TODO: play sound here? could just make this a client config
     }
 

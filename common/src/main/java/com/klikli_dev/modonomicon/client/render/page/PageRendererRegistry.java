@@ -14,12 +14,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PageRendererRegistry {
-    static final Set<Item> ITEMS_NOT_TO_RENDER = new HashSet<>();
-    static final Set<Fluid> FLUIDS_NOT_TO_RENDER = new HashSet<>();
-    private static final Map<ResourceLocation, PageRendererFactory> pageRenderers = new HashMap<>();
+    static final Set<Item> ITEMS_NOT_TO_RENDER = ConcurrentHashMap.newKeySet();
+    static final Set<Fluid> FLUIDS_NOT_TO_RENDER = ConcurrentHashMap.newKeySet();
+    private static final Map<ResourceLocation, PageRendererFactory> pageRenderers = new ConcurrentHashMap<>();
 
     /**
      * Call from client setup
