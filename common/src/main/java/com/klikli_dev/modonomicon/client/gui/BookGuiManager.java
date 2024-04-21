@@ -6,9 +6,8 @@
 
 package com.klikli_dev.modonomicon.client.gui;
 
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookCategory;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
 import com.klikli_dev.modonomicon.client.gui.book.*;
 import com.klikli_dev.modonomicon.data.BookDataManager;
@@ -27,7 +26,7 @@ public class BookGuiManager {
 
     public Book currentBook;
     public BookCategory currentCategory;
-    public BookEntry currentEntry;
+    public BookEntry currentBookEntry;
 
     public BookOverviewScreen currentOverviewScreen;
     public BookCategoryScreen currentCategoryScreen;
@@ -176,8 +175,8 @@ public class BookGuiManager {
         }
 
         var entry = book.getEntry(entryId);
-        if (this.currentEntry != entry) {
-            this.currentEntry = entry;
+        if (this.currentBookEntry != entry) {
+            this.currentBookEntry = entry;
         }
 
         if (this.currentContentScreen == null || this.currentContentScreen.getEntry() != entry) {
@@ -197,7 +196,7 @@ public class BookGuiManager {
         //TODO: play sound here? could just make this a client config
     }
 
-    public boolean isEntryAlreadyDisplayed(BookEntry entry) {
-        return Minecraft.getInstance().screen instanceof BookContentScreen bookContentScreen && bookContentScreen.getEntry().equals(entry);
+    public boolean isEntryAlreadyDisplayed(BookEntry bookEntry) {
+        return Minecraft.getInstance().screen instanceof BookContentScreen bookContentScreen && bookContentScreen.getEntry().equals(bookEntry);
     }
 }

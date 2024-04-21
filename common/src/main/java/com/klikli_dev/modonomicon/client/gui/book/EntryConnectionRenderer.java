@@ -7,8 +7,8 @@
 
 package com.klikli_dev.modonomicon.client.gui.book;
 
-import com.klikli_dev.modonomicon.book.BookEntry;
-import com.klikli_dev.modonomicon.book.BookEntryParent;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,150 +23,150 @@ public class EntryConnectionRenderer {
         this.entryTextures = entryTextures;
     }
 
-    public void renderLinedUpEntries(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent, boolean isVertical) {
+    public void renderLinedUpEntries(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntry parentBookEntry, BookEntryParent parent, boolean isVertical) {
         if (isVertical) {
-            this.drawVerticalLine(guiGraphics, parentEntry.getX(), entry.getY(), parentEntry.getY());
+            this.drawVerticalLine(guiGraphics, parentBookEntry.getX(), bookEntry.getY(), parentBookEntry.getY());
             if (parent.drawArrow()) {
                 //move the arrow head one grid slot before the target, because it occupies 30x30
-                if (parentEntry.getY() > entry.getY())
-                    this.drawUpArrow(guiGraphics, entry.getX(), entry.getY() + 1);
+                if (parentBookEntry.getY() > bookEntry.getY())
+                    this.drawUpArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() + 1);
                 else
-                    this.drawDownArrow(guiGraphics, entry.getX(), entry.getY() - 1);
+                    this.drawDownArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() - 1);
             }
 
         } else {
-            this.drawHorizontalLine(guiGraphics, parentEntry.getY(), entry.getX(), parentEntry.getX());
+            this.drawHorizontalLine(guiGraphics, parentBookEntry.getY(), bookEntry.getX(), parentBookEntry.getX());
             if (parent.drawArrow()) {
                 //move the arrow head one grid slot before the target, because it occupies 30x30
-                if (parentEntry.getX() > entry.getX())
-                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+                if (parentBookEntry.getX() > bookEntry.getX())
+                    this.drawLeftArrow(guiGraphics, bookEntry.getX() + 1, bookEntry.getY());
                 else
-                    this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
+                    this.drawRightArrow(guiGraphics, bookEntry.getX() - 1, bookEntry.getY());
             }
         }
     }
 
-    public void renderSmallCurves(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent) {
-        this.drawVerticalLine(guiGraphics, entry.getX(), parentEntry.getY(), entry.getY());
-        this.drawHorizontalLine(guiGraphics, parentEntry.getY(), parentEntry.getX(), entry.getX());
-        if (entry.getX() > parentEntry.getX()) {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawSmallCurveLeftDown(guiGraphics, entry.getX(), parentEntry.getY());
+    public void renderSmallCurves(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntry parentBookEntry, BookEntryParent parent) {
+        this.drawVerticalLine(guiGraphics, bookEntry.getX(), parentBookEntry.getY(), bookEntry.getY());
+        this.drawHorizontalLine(guiGraphics, parentBookEntry.getY(), parentBookEntry.getX(), bookEntry.getX());
+        if (bookEntry.getX() > parentBookEntry.getX()) {
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawSmallCurveLeftDown(guiGraphics, bookEntry.getX(), parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawDownArrow(guiGraphics, entry.getX(), entry.getY() - 1);
+                    this.drawDownArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() - 1);
             } else {
-                this.drawSmallCurveLeftUp(guiGraphics, entry.getX(), parentEntry.getY());
+                this.drawSmallCurveLeftUp(guiGraphics, bookEntry.getX(), parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawUpArrow(guiGraphics, entry.getX(), entry.getY() + 1);
+                    this.drawUpArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() + 1);
             }
         } else {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawSmallCurveRightDown(guiGraphics, entry.getX(), parentEntry.getY());
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawSmallCurveRightDown(guiGraphics, bookEntry.getX(), parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawDownArrow(guiGraphics, entry.getX(), entry.getY() - 1);
+                    this.drawDownArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() - 1);
             } else {
-                this.drawSmallCurveRightUp(guiGraphics, entry.getX(), parentEntry.getY());
+                this.drawSmallCurveRightUp(guiGraphics, bookEntry.getX(), parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawUpArrow(guiGraphics, entry.getX(), entry.getY() + 1);
+                    this.drawUpArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() + 1);
             }
         }
     }
 
-    public void renderSmallCurvesReversed(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent) {
-        this.drawHorizontalLine(guiGraphics, entry.getY(), entry.getX(), parentEntry.getX());
-        this.drawVerticalLine(guiGraphics, parentEntry.getX(), parentEntry.getY(), entry.getY());
-        if (entry.getX() < parentEntry.getX()) {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawSmallCurveLeftUp(guiGraphics, parentEntry.getX(), entry.getY());
+    public void renderSmallCurvesReversed(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntry parentBookEntry, BookEntryParent parent) {
+        this.drawHorizontalLine(guiGraphics, bookEntry.getY(), bookEntry.getX(), parentBookEntry.getX());
+        this.drawVerticalLine(guiGraphics, parentBookEntry.getX(), parentBookEntry.getY(), bookEntry.getY());
+        if (bookEntry.getX() < parentBookEntry.getX()) {
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawSmallCurveLeftUp(guiGraphics, parentBookEntry.getX(), bookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+                    this.drawLeftArrow(guiGraphics, bookEntry.getX() + 1, bookEntry.getY());
             } else {
-                this.drawSmallCurveLeftDown(guiGraphics, parentEntry.getX(), entry.getY());
+                this.drawSmallCurveLeftDown(guiGraphics, parentBookEntry.getX(), bookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+                    this.drawLeftArrow(guiGraphics, bookEntry.getX() + 1, bookEntry.getY());
             }
         } else {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawSmallCurveRightUp(guiGraphics, parentEntry.getX(), entry.getY());
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawSmallCurveRightUp(guiGraphics, parentBookEntry.getX(), bookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
+                    this.drawRightArrow(guiGraphics, bookEntry.getX() - 1, bookEntry.getY());
             } else {
-                this.drawSmallCurveRightDown(guiGraphics, parentEntry.getX(), entry.getY());
+                this.drawSmallCurveRightDown(guiGraphics, parentBookEntry.getX(), bookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
+                    this.drawRightArrow(guiGraphics, bookEntry.getX() - 1, bookEntry.getY());
             }
         }
     }
 
-    public void renderLargeCurves(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent) {
-        this.drawHorizontalLineShortened(guiGraphics, parentEntry.getY(), parentEntry.getX(), entry.getX());
-        this.drawVerticalLineShortened(guiGraphics, entry.getX(), entry.getY(), parentEntry.getY());
-        if (entry.getX() > parentEntry.getX()) {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawLargeCurveLeftDown(guiGraphics, entry.getX() - 1, parentEntry.getY());
+    public void renderLargeCurves(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntry parentBookEntry, BookEntryParent parent) {
+        this.drawHorizontalLineShortened(guiGraphics, parentBookEntry.getY(), parentBookEntry.getX(), bookEntry.getX());
+        this.drawVerticalLineShortened(guiGraphics, bookEntry.getX(), bookEntry.getY(), parentBookEntry.getY());
+        if (bookEntry.getX() > parentBookEntry.getX()) {
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawLargeCurveLeftDown(guiGraphics, bookEntry.getX() - 1, parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawDownArrow(guiGraphics, entry.getX(), entry.getY() - 1);
+                    this.drawDownArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() - 1);
             } else {
-                this.drawLargeCurveLeftUp(guiGraphics, entry.getX() - 1, parentEntry.getY() - 1);
+                this.drawLargeCurveLeftUp(guiGraphics, bookEntry.getX() - 1, parentBookEntry.getY() - 1);
                 if (parent.drawArrow())
-                    this.drawUpArrow(guiGraphics, entry.getX(), entry.getY() + 1);
+                    this.drawUpArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() + 1);
             }
         } else {
-            if (entry.getY() > parentEntry.getY()) {
-                this.drawLargeCurveRightDown(guiGraphics, entry.getX(), parentEntry.getY());
+            if (bookEntry.getY() > parentBookEntry.getY()) {
+                this.drawLargeCurveRightDown(guiGraphics, bookEntry.getX(), parentBookEntry.getY());
                 if (parent.drawArrow())
-                    this.drawDownArrow(guiGraphics, entry.getX(), entry.getY() - 1);
+                    this.drawDownArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() - 1);
             } else {
-                this.drawLargeCurveRightUp(guiGraphics, entry.getX(), parentEntry.getY() - 1);
+                this.drawLargeCurveRightUp(guiGraphics, bookEntry.getX(), parentBookEntry.getY() - 1);
                 if (parent.drawArrow())
-                    this.drawUpArrow(guiGraphics, entry.getX(), entry.getY() + 1);
+                    this.drawUpArrow(guiGraphics, bookEntry.getX(), bookEntry.getY() + 1);
             }
         }
     }
 
-    public void renderLargeCurvesReversed(GuiGraphics guiGraphics, BookEntry entry, BookEntry parentEntry, BookEntryParent parent) {
-        this.drawHorizontalLineShortened(guiGraphics, entry.getY(), entry.getX(), parentEntry.getX());
-        this.drawVerticalLineShortened(guiGraphics, parentEntry.getX(), parentEntry.getY(), entry.getY());
-        if (entry.getX() > parentEntry.getX()) {
-            if (entry.getY() > parentEntry.getY())
-                this.drawLargeCurveRightUp(guiGraphics, parentEntry.getX(), entry.getY() - 1);
+    public void renderLargeCurvesReversed(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntry parentBookEntry, BookEntryParent parent) {
+        this.drawHorizontalLineShortened(guiGraphics, bookEntry.getY(), bookEntry.getX(), parentBookEntry.getX());
+        this.drawVerticalLineShortened(guiGraphics, parentBookEntry.getX(), parentBookEntry.getY(), bookEntry.getY());
+        if (bookEntry.getX() > parentBookEntry.getX()) {
+            if (bookEntry.getY() > parentBookEntry.getY())
+                this.drawLargeCurveRightUp(guiGraphics, parentBookEntry.getX(), bookEntry.getY() - 1);
             else
-                this.drawLargeCurveRightDown(guiGraphics, parentEntry.getX(), entry.getY());
+                this.drawLargeCurveRightDown(guiGraphics, parentBookEntry.getX(), bookEntry.getY());
             if (parent.drawArrow())
-                this.drawRightArrow(guiGraphics, entry.getX() - 1, entry.getY());
+                this.drawRightArrow(guiGraphics, bookEntry.getX() - 1, bookEntry.getY());
         } else {
-            if (entry.getY() > parentEntry.getY())
-                this.drawLargeCurveLeftUp(guiGraphics, parentEntry.getX() - 1, parentEntry.getY() + 1);
+            if (bookEntry.getY() > parentBookEntry.getY())
+                this.drawLargeCurveLeftUp(guiGraphics, parentBookEntry.getX() - 1, parentBookEntry.getY() + 1);
             else
-                this.drawLargeCurveLeftDown(guiGraphics, parentEntry.getX() - 1, entry.getY());
+                this.drawLargeCurveLeftDown(guiGraphics, parentBookEntry.getX() - 1, bookEntry.getY());
             if (parent.drawArrow())
-                this.drawLeftArrow(guiGraphics, entry.getX() + 1, entry.getY());
+                this.drawLeftArrow(guiGraphics, bookEntry.getX() + 1, bookEntry.getY());
         }
     }
 
-    public void render(GuiGraphics guiGraphics, BookEntry entry, BookEntryParent parent) {
-        BookEntry parentEntry = parent.getEntry();
+    public void render(GuiGraphics guiGraphics, BookEntry bookEntry, BookEntryParent parent) {
+        BookEntry parentBookEntry = parent.getEntry();
 
         //only render if line is enabled and if we are in the same category (other category -> other page!)
-        if (parent.isLineEnabled() && parentEntry.getCategory().equals(entry.getCategory())) {
-            int deltaX = abs(entry.getX() - parentEntry.getX());
-            int deltaY = abs(entry.getY() - parentEntry.getY());
+        if (parent.isLineEnabled() && parentBookEntry.getCategory().equals(bookEntry.getCategory())) {
+            int deltaX = abs(bookEntry.getX() - parentBookEntry.getX());
+            int deltaY = abs(bookEntry.getY() - parentBookEntry.getY());
 
             if (deltaX == 0 || deltaY == 0) {
                 //if the entries are in a line, just draw a line
-                this.renderLinedUpEntries(guiGraphics, entry, parentEntry, parent, deltaX == 0);
+                this.renderLinedUpEntries(guiGraphics, bookEntry, parentBookEntry, parent, deltaX == 0);
             } else {
                 if (deltaX < 2 || deltaY < 2) {
                     if (!parent.isLineReversed()) {
-                        this.renderSmallCurves(guiGraphics, entry, parentEntry, parent);
+                        this.renderSmallCurves(guiGraphics, bookEntry, parentBookEntry, parent);
                     } else {
-                        this.renderSmallCurvesReversed(guiGraphics, entry, parentEntry, parent);
+                        this.renderSmallCurvesReversed(guiGraphics, bookEntry, parentBookEntry, parent);
                     }
                 } else {
                     if (!parent.isLineReversed()) {
-                        this.renderLargeCurves(guiGraphics, entry, parentEntry, parent);
+                        this.renderLargeCurves(guiGraphics, bookEntry, parentBookEntry, parent);
                     } else {
-                        this.renderLargeCurvesReversed(guiGraphics, entry, parentEntry, parent);
+                        this.renderLargeCurvesReversed(guiGraphics, bookEntry, parentBookEntry, parent);
                     }
                 }
             }

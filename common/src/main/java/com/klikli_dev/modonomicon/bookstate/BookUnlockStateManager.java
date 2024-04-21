@@ -10,7 +10,7 @@ import com.klikli_dev.modonomicon.Modonomicon;
 import com.klikli_dev.modonomicon.book.Book;
 import com.klikli_dev.modonomicon.book.BookCategory;
 import com.klikli_dev.modonomicon.book.BookCommand;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
 import com.klikli_dev.modonomicon.book.page.BookPage;
 import com.klikli_dev.modonomicon.data.BookDataManager;
 import com.klikli_dev.modonomicon.networking.RequestSyncBookStatesMessage;
@@ -91,8 +91,8 @@ public class BookUnlockStateManager {
         return this.getStateFor(player).isUnlocked(category);
     }
 
-    public boolean isUnlockedFor(Player player, BookEntry entry) {
-        return this.getStateFor(player).isUnlocked(entry);
+    public boolean isUnlockedFor(Player player, BookEntry bookEntry) {
+        return this.getStateFor(player).isUnlocked(bookEntry);
     }
 
     public boolean isUnlockedFor(Player player, BookPage page) {
@@ -103,8 +103,8 @@ public class BookUnlockStateManager {
         return this.getStateFor(player).getUnlockedPagesIn(entry);
     }
 
-    public boolean isReadFor(Player player, BookEntry entry) {
-        return this.getStateFor(player).isRead(entry);
+    public boolean isReadFor(Player player, BookEntry bookEntry) {
+        return this.getStateFor(player).isRead(bookEntry);
     }
 
     public boolean canRunFor(Player player, BookCommand command) {
@@ -123,8 +123,8 @@ public class BookUnlockStateManager {
     /**
      * Modifies state, but does not call syncFor, needs to be done by the caller side if needed.
      */
-    public boolean readFor(ServerPlayer player, BookEntry entry) {
-        return this.getStateFor(player).read(entry, player);
+    public boolean readFor(ServerPlayer player, BookEntry bookEntry) {
+        return this.getStateFor(player).read(bookEntry, player);
     }
 
     public void onAdvancement(ServerPlayer player) {

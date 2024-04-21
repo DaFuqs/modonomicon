@@ -6,12 +6,14 @@
 
 package com.klikli_dev.modonomicon.book;
 
-public class ResolvedBookEntryParent extends BookEntryParent {
-    protected BookEntry entry;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
 
-    public ResolvedBookEntryParent(BookEntryParent unresolved, BookEntry entry) {
-        super(entry.getId());
-        this.entry = entry;
+public class ResolvedBookEntryParent extends BookEntryParent {
+    protected BookEntry bookEntry;
+
+    public ResolvedBookEntryParent(BookEntryParent unresolved, BookEntry bookEntry) {
+        super(bookEntry.getId());
+        this.bookEntry = bookEntry;
         this.drawArrow = unresolved.drawArrow;
         this.lineEnabled = unresolved.lineEnabled;
         this.lineReversed = unresolved.lineReversed;
@@ -19,6 +21,6 @@ public class ResolvedBookEntryParent extends BookEntryParent {
 
     @Override
     public BookEntry getEntry() {
-        return this.entry;
+        return this.bookEntry;
     }
 }

@@ -7,25 +7,25 @@
 package com.klikli_dev.modonomicon.book.conditions.context;
 
 import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
 
 public class BookConditionEntryContext extends BookConditionContext {
-    public final BookEntry entry;
+    public final BookEntry bookEntry;
 
-    public BookConditionEntryContext(Book book, BookEntry entry) {
+    public BookConditionEntryContext(Book book, BookEntry bookEntry) {
         super(book);
-        this.entry = entry;
+        this.bookEntry = bookEntry;
     }
 
     @Override
     public String toString() {
         return "BookConditionEntryContext{" +
                 "book=" + this.book +
-                ", entry=" + this.entry +
+                ", entry=" + this.bookEntry +
                 '}';
     }
 
     public BookEntry getEntry() {
-        return this.entry;
+        return this.bookEntry;
     }
 }

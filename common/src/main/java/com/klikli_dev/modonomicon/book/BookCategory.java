@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Category;
 import com.klikli_dev.modonomicon.book.conditions.BookCondition;
 import com.klikli_dev.modonomicon.book.conditions.BookNoneCondition;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
 import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -189,8 +190,8 @@ public class BookCategory {
         return this.entries;
     }
 
-    public void addEntry(BookEntry entry) {
-        this.entries.putIfAbsent(entry.id, entry);
+    public void addEntry(BookEntry bookEntry) {
+        this.entries.putIfAbsent(bookEntry.getId(), bookEntry);
     }
 
     public BookEntry getEntry(ResourceLocation id) {

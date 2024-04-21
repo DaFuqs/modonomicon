@@ -41,8 +41,8 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
 
         this.add(Gui.HOVER_BOOK_LINK, "Go to: %s");
         this.add(Gui.HOVER_BOOK_LINK_LOCKED, "%s.\n%s");
-        this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO, "You need to unlock this entry before you can open the link!");
-        this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO_HINT, "Hint: The entry is in the Category: %s");
+        this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO, "You need to unlock this bookEntry before you can open the link!");
+        this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO_HINT, "Hint: The bookEntry is in the Category: %s");
         this.add(Gui.HOVER_BOOK_PAGE_LINK_LOCKED_INFO, "You need to unlock this page before you can open the link!");
         this.add(Gui.HOVER_BOOK_PAGE_LINK_LOCKED_INFO_HINT, "Hint: The page is in the Entry %s, under the Category %s");
         this.add(Gui.HOVER_HTTP_LINK, "Visit: %s");
@@ -91,7 +91,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(Command.ERROR_LOAD_PROGRESS, "Invalid unlock code!");
         this.add(Command.ERROR_LOAD_PROGRESS_CLIENT, "Failed to decode unlock code. Make sure to have a valid unlock code in your clipboard! Current Clipboard content: \"%s\"");
 
-        this.add(Command.DEFAULT_FAILURE_MESSAGE, "Modonomicon tried to run a command for you (e.g. because you read an entry for the first time, or clicked a command button or command link). However, it seems you already reached the maximum use limit for this command.");
+        this.add(Command.DEFAULT_FAILURE_MESSAGE, "Modonomicon tried to run a command for you (e.g. because you read an bookEntry for the first time, or clicked a command button or command link). However, it seems you already reached the maximum use limit for this command.");
 
         //sounds
         this.add(Subtitles.TURN_PAGE, "Turn Page");
@@ -148,7 +148,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.pageText(), "A sample multiblock.");
 
         this.add(helper.entryName(), "Multiblock Entry");
-        this.add(helper.entryDescription(), "An entry showcasing a multiblock.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing a multiblock.");
     }
 
     private void addDemoBookConditionEntries(BookContextHelper helper) {
@@ -168,7 +168,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         helper.entry("condition_level_1");
         helper.page("info");
         this.add(helper.pageTitle(), "Condition Level 1");
-        this.add(helper.pageText(), "This entry depends on Condition Root being read.");
+        this.add(helper.pageText(), "This bookEntry depends on Condition Root being read.");
 
         this.add(helper.entryName(), "Condition Level 1 Entry");
         this.add(helper.entryDescription(), "Depends on Condition Root being read.");
@@ -176,7 +176,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         helper.entry("condition_level_2");
         helper.page("info");
         this.add(helper.pageTitle(), "Condition Level 2");
-        this.add(helper.pageText(), "This entry depends on Condition Level 1 being unlocked.");
+        this.add(helper.pageText(), "This bookEntry depends on Condition Level 1 being unlocked.");
 
         this.add(helper.entryName(), "Condition Level 2 Entry");
         this.add(helper.entryDescription(), "Depends on Condition Level 1 being unlocked.");
@@ -198,7 +198,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.pageText(), "A smoking recipe page with one recipe and some text.");
 
         this.add(helper.entryName(), "Recipe Entry");
-        this.add(helper.entryDescription(), "An entry showcasing recipe pages.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing recipe pages.");
     }
 
     private void addDemoBookSpotlightEntry(BookContextHelper helper) {
@@ -216,7 +216,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.pageText(), "A sample spotlight page with automatic title.");
 
         this.add(helper.entryName(), "Spotlight Entry");
-        this.add(helper.entryDescription(), "An entry showcasing spotlight pages.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing spotlight pages.");
     }
 
     private void addDemoBookEmptyPageEntry(BookContextHelper helper) {
@@ -227,7 +227,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.pageText(), "Empty pages allow to add .. empty pages.");
 
         this.add(helper.entryName(), "Empty Page Entry");
-        this.add(helper.entryDescription(), "An entry showcasing empty pages.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing empty pages.");
     }
 
     private void addDemoBookEntityEntry(BookContextHelper helper) {
@@ -244,7 +244,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(helper.pageText(), "A sample entity page with automatic title.");
 
         this.add(helper.entryName(), "Entity Entry");
-        this.add(helper.entryDescription(), "An entry showcasing entity pages.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing entity pages.");
     }
 
     private void addDemoBookImagePageEntry(BookContextHelper helper) {
@@ -260,7 +260,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
 
 
         this.add(helper.entryName(), "Image Page Entry");
-        this.add(helper.entryDescription(), "An entry showcasing image pages.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing image pages.");
     }
 
     private void addDemoBookImageRedirectEntry(BookContextHelper helper) {
@@ -306,7 +306,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
                              """);
 
         this.add(helper.entryName(), "Basic Formatting Entry");
-        this.add(helper.entryDescription(), "An entry showcasing basic formatting.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing basic formatting.");
     }
 
     private void addDemoBookAdvancedFormattingEntry(BookContextHelper helper) {
@@ -345,7 +345,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
                         This page is to test title scaling!""");
 
         this.add(helper.entryName(), "Advanced Formatting Entry");
-        this.add(helper.entryDescription(), "An entry showcasing advanced formatting.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing advanced formatting.");
     }
 
     private void addDemoBookLinkFormattingEntry(BookContextHelper helper) {
@@ -359,15 +359,15 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
                         [Or me!](https://github.com/klikli-dev/modonomicon)
                              """);
 
-        helper.page("page2"); //book entry links
+        helper.page("page2"); //book bookEntry links
         this.add(helper.pageTitle(), "Book Links");
         this.add(helper.pageText(),
                 """
-                        [View a Multiblock](entry://modonomicon:demo/features/multiblock) \\
-                        [Link to a Condition](entry://modonomicon:demo/features/condition_level_1) \\
-                        [Link to basic formatting](entry://modonomicon:demo/formatting/basic) \\
-                        [Link without book id](entry://formatting/basic) \\
-                        [Always locked](entry://modonomicon:demo/formatting/always_locked) \\
+                        [View a Multiblock](bookEntry://modonomicon:demo/features/multiblock) \\
+                        [Link to a Condition](bookEntry://modonomicon:demo/features/condition_level_1) \\
+                        [Link to basic formatting](bookEntry://modonomicon:demo/formatting/basic) \\
+                        [Link without book id](bookEntry://formatting/basic) \\
+                        [Always locked](bookEntry://modonomicon:demo/formatting/always_locked) \\
                         [Category Link without book id](category://formatting/)
                              """);
 
@@ -377,10 +377,10 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
                 """
                         [Link to a Patchouli Entry](patchouli://occultism:dictionary_of_spirits//misc/books_of_calling)
                              """);
-        this.add("patchouli.occultism.dictionary_of_spirits.misc.books_of_calling.name", "Books of Calling"); //patchouli entry name
+        this.add("patchouli.occultism.dictionary_of_spirits.misc.books_of_calling.name", "Books of Calling"); //patchouli bookEntry name
 
         this.add(helper.entryName(), "Link Formatting Entry");
-        this.add(helper.entryDescription(), "An entry showcasing link formatting.");
+        this.add(helper.entryDescription(), "An bookEntry showcasing link formatting.");
     }
 
     private void addDemoBookHiddenCategory(BookContextHelper helper) {
@@ -425,13 +425,13 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add("modonomicon.test.sections.test_category.test_entry_child.page2.text",
                 """
                         And this is our page three.  \s
-                        [With link](entry://modonomicon:test/test_category/test_entry@test_anchor)
+                        [With link](bookEntry://modonomicon:test/test_category/test_entry@test_anchor)
                          """);
 
         this.add("modonomicon.test.sections.test_category.test_entry_child.page_with_error.text",
                 """
                         Page with invalid link!  \s
-                        [With link](entry://modonomicon:test/test_category/test_entry2@test_anchor)
+                        [With link](bookEntry://modonomicon:test/test_category/test_entry2@test_anchor)
                          """);
 
         this.add("modonomicon.test.sections.test_category.test_entry_child.condition.tooltip",

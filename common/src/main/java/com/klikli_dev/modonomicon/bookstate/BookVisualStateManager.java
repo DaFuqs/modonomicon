@@ -7,9 +7,8 @@
 package com.klikli_dev.modonomicon.bookstate;
 
 import com.klikli_dev.modonomicon.Modonomicon;
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookCategory;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.bookstate.visual.BookVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.CategoryVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.EntryVisualState;
@@ -18,7 +17,6 @@ import com.klikli_dev.modonomicon.networking.SyncBookVisualStatesMessage;
 import com.klikli_dev.modonomicon.platform.Services;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 public class BookVisualStateManager {
 
@@ -42,12 +40,12 @@ public class BookVisualStateManager {
         return this.getStateFor(player).getCategoryState(category);
     }
 
-    public EntryVisualState getEntryStateFor(Player player, BookEntry entry) {
-        return this.getStateFor(player).getEntryState(entry);
+    public EntryVisualState getEntryStateFor(Player player, BookEntry bookEntry) {
+        return this.getStateFor(player).getEntryState(bookEntry);
     }
 
-    public void setEntryStateFor(ServerPlayer player, BookEntry entry, EntryVisualState state) {
-        this.getStateFor(player).setEntryState(entry, state);
+    public void setEntryStateFor(ServerPlayer player, BookEntry bookEntry, EntryVisualState state) {
+        this.getStateFor(player).setEntryState(bookEntry, state);
         this.saveData.setDirty();
     }
 

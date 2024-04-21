@@ -7,7 +7,7 @@
 package com.klikli_dev.modonomicon.networking;
 
 import com.klikli_dev.modonomicon.Modonomicon;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.bookstate.BookVisualStateManager;
 import com.klikli_dev.modonomicon.data.BookDataManager;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,11 +19,11 @@ public class SaveEntryStateMessage implements Message {
 
     public static final ResourceLocation ID = new ResourceLocation(Modonomicon.MOD_ID, "save_entry_state");
 
-    public BookEntry entry;
+    public BookEntry bookEntry;
     public int openPagesIndex;
 
-    public SaveEntryStateMessage(BookEntry entry, int openPagesIndex) {
-        this.entry = entry;
+    public SaveEntryStateMessage(ContentBookEntry entry, int openPagesIndex) {
+        this.bookEntry = entry;
         this.openPagesIndex = openPagesIndex;
     }
 
@@ -33,14 +33,14 @@ public class SaveEntryStateMessage implements Message {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.entry.getBook().getId());
-        buf.writeResourceLocation(this.entry.getId());
+        buf.writeResourceLocation(this.bookEntry.getBook().getId());
+        buf.writeResourceLocation(this.bookEntry.getId());
         buf.writeVarInt(this.openPagesIndex);
     }
 
     @Override
     public void decode(FriendlyByteBuf buf) {
-        this.entry = BookDataManager.get().getBook(buf.readResourceLocation()).getEntry(buf.readResourceLocation());
+        this.bookEntry = BookDataManager.get().getBook(buf.readResourceLocation()).getEntry(buf.readResourceLocation());
         this.openPagesIndex = buf.readVarInt();
     }
 
@@ -51,9 +51,9 @@ public class SaveEntryStateMessage implements Message {
 
     @Override
     public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
-        var currentState = BookVisualStateManager.get().getEntryStateFor(player, this.entry);
+        var currentState = BookVisualStateManager.get().getEntryStateFor(player, this.bookEntry);
         currentState.openPagesIndex = this.openPagesIndex;
-        BookVisualStateManager.get().setEntryStateFor(player, this.entry, currentState);
+        BookVisualStateManager.get().setEntryStateFor(player, this.bookEntry, currentState);
         BookVisualStateManager.get().syncFor(player);
     }
 }

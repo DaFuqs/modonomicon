@@ -13,10 +13,8 @@ import com.google.gson.JsonObject;
 import com.klikli_dev.modonomicon.Modonomicon;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Condition;
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookCategory;
-import com.klikli_dev.modonomicon.book.BookCommand;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.book.conditions.BookAndCondition;
 import com.klikli_dev.modonomicon.book.conditions.BookCondition;
 import com.klikli_dev.modonomicon.book.conditions.BookEntryReadCondition;
@@ -199,8 +197,19 @@ public class BookDataManager extends SimpleJsonResourceReloadListener {
         return BookCategory.fromJson(key, value);
     }
 
-    private BookEntry loadEntry(ResourceLocation key, JsonObject value) {
-        return BookEntry.fromJson(key, value);
+    private BookEntry loadEntry(ResourceLocation id, JsonObject value) {
+        if(value.has("type")) {
+            ResourceLocation typeId = ResourceLocation.tryParse(value.get("type").getAsString());
+            return LoaderRegistry.getEntryJsonLoader(typeId).fromJson(id, value);
+        }
+        
+        // This part here is for backwards compatibility and simplicity
+        // If an entry does not have a type specified, ContentEntry is assumed
+        // unless it has a property called "category_to_open" (CategoryLinkEntry)
+        if(value.has("category_to_open")) {
+            return CategoryLinkBookEntry.fromJson(id, value);
+        }
+        return ContentBookEntry.fromJson(id, value);
     }
 
     private BookCommand loadCommand(ResourceLocation key, JsonObject value) {

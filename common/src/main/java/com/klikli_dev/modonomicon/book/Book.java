@@ -10,6 +10,7 @@ import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Nbt;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
 import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
 import com.klikli_dev.modonomicon.registry.ItemRegistry;
@@ -346,8 +347,8 @@ public class Book {
         return this.categories.values().stream().sorted(Comparator.comparingInt(BookCategory::getSortNumber)).toList();
     }
 
-    public void addEntry(BookEntry entry) {
-        this.entries.putIfAbsent(entry.id, entry);
+    public void addEntry(BookEntry bookEntry) {
+        this.entries.putIfAbsent(bookEntry.getId(), bookEntry);
     }
 
     public BookEntry getEntry(ResourceLocation id) {

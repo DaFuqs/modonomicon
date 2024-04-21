@@ -6,9 +6,8 @@
 
 package com.klikli_dev.modonomicon.bookstate;
 
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookCategory;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.bookstate.visual.BookVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.CategoryVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.EntryVisualState;
@@ -44,16 +43,16 @@ public class BookVisualStates {
         return this.getBookState(category.getBook()).categoryStates.computeIfAbsent(category.getId(), (id) -> new CategoryVisualState());
     }
 
-    public EntryVisualState getEntryState(BookEntry entry) {
-        return this.getCategoryState(entry.getCategory()).entryStates.computeIfAbsent(entry.getId(), (id) -> new EntryVisualState());
+    public EntryVisualState getEntryState(BookEntry bookEntry) {
+        return this.getCategoryState(bookEntry.getCategory()).entryStates.computeIfAbsent(bookEntry.getId(), (id) -> new EntryVisualState());
     }
 
     public void setBookState(Book book, BookVisualState state) {
         this.bookStates.put(book.getId(), state);
     }
 
-    public void setEntryState(BookEntry entry, EntryVisualState state) {
-        this.getCategoryState(entry.getCategory()).entryStates.put(entry.getId(), state);
+    public void setEntryState(BookEntry bookEntry, EntryVisualState state) {
+        this.getCategoryState(bookEntry.getCategory()).entryStates.put(bookEntry.getId(), state);
     }
 
     public void setCategoryState(BookCategory category, CategoryVisualState state) {
