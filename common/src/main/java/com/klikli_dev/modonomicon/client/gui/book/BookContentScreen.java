@@ -412,7 +412,7 @@ public class BookContentScreen extends BookPaginatedScreen {
     private void loadEntryState() {
         var state = BookVisualStateManager.get().getEntryStateFor(this.parentScreen.getMinecraft().player, this.entry);
 
-        BookGuiManager.get().currentBookEntry = this.entry;
+        BookGuiManager.get().currentEntry = this.entry;
         BookGuiManager.get().currentContentScreen = this;
 
         if (state != null) {

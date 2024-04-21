@@ -19,11 +19,11 @@ public class SaveEntryStateMessage implements Message {
 
     public static final ResourceLocation ID = new ResourceLocation(Modonomicon.MOD_ID, "save_entry_state");
 
-    public BookEntry bookEntry;
+    public BookEntry entry;
     public int openPagesIndex;
 
     public SaveEntryStateMessage(ContentBookEntry entry, int openPagesIndex) {
-        this.bookEntry = entry;
+        this.entry = entry;
         this.openPagesIndex = openPagesIndex;
     }
 
@@ -33,14 +33,14 @@ public class SaveEntryStateMessage implements Message {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.bookEntry.getBook().getId());
-        buf.writeResourceLocation(this.bookEntry.getId());
+        buf.writeResourceLocation(this.entry.getBook().getId());
+        buf.writeResourceLocation(this.entry.getId());
         buf.writeVarInt(this.openPagesIndex);
     }
 
     @Override
     public void decode(FriendlyByteBuf buf) {
-        this.bookEntry = BookDataManager.get().getBook(buf.readResourceLocation()).getEntry(buf.readResourceLocation());
+        this.entry = BookDataManager.get().getBook(buf.readResourceLocation()).getEntry(buf.readResourceLocation());
         this.openPagesIndex = buf.readVarInt();
     }
 
@@ -51,9 +51,9 @@ public class SaveEntryStateMessage implements Message {
 
     @Override
     public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player) {
-        var currentState = BookVisualStateManager.get().getEntryStateFor(player, this.bookEntry);
+        var currentState = BookVisualStateManager.get().getEntryStateFor(player, this.entry);
         currentState.openPagesIndex = this.openPagesIndex;
-        BookVisualStateManager.get().setEntryStateFor(player, this.bookEntry, currentState);
+        BookVisualStateManager.get().setEntryStateFor(player, this.entry, currentState);
         BookVisualStateManager.get().syncFor(player);
     }
 }

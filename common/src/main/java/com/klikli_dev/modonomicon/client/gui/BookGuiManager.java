@@ -26,7 +26,7 @@ public class BookGuiManager {
 
     public Book currentBook;
     public BookCategory currentCategory;
-    public BookEntry currentBookEntry;
+    public BookEntry currentEntry;
 
     public BookOverviewScreen currentOverviewScreen;
     public BookCategoryScreen currentCategoryScreen;
@@ -175,8 +175,8 @@ public class BookGuiManager {
         }
 
         var entry = book.getEntry(entryId);
-        if (this.currentBookEntry != entry) {
-            this.currentBookEntry = entry;
+        if (this.currentEntry != entry) {
+            this.currentEntry = entry;
         }
 
         if (this.currentContentScreen == null || this.currentContentScreen.getEntry() != entry) {
@@ -196,7 +196,7 @@ public class BookGuiManager {
         //TODO: play sound here? could just make this a client config
     }
 
-    public boolean isEntryAlreadyDisplayed(BookEntry bookEntry) {
-        return Minecraft.getInstance().screen instanceof BookContentScreen bookContentScreen && bookContentScreen.getEntry().equals(bookEntry);
+    public boolean isEntryAlreadyDisplayed(BookEntry entry) {
+        return Minecraft.getInstance().screen instanceof BookContentScreen bookContentScreen && bookContentScreen.getEntry().equals(entry);
     }
 }

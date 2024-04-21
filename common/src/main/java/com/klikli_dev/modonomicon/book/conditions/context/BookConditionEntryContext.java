@@ -10,22 +10,22 @@ import com.klikli_dev.modonomicon.book.Book;
 import com.klikli_dev.modonomicon.book.entries.BookEntry;
 
 public class BookConditionEntryContext extends BookConditionContext {
-    public final BookEntry bookEntry;
+    public final BookEntry entry;
 
-    public BookConditionEntryContext(Book book, BookEntry bookEntry) {
+    public BookConditionEntryContext(Book book, BookEntry entry) {
         super(book);
-        this.bookEntry = bookEntry;
+        this.entry = entry;
     }
 
     @Override
     public String toString() {
         return "BookConditionEntryContext{" +
                 "book=" + this.book +
-                ", entry=" + this.bookEntry +
+                ", entry=" + this.entry +
                 '}';
     }
 
     public BookEntry getEntry() {
-        return this.bookEntry;
+        return this.entry;
     }
 }

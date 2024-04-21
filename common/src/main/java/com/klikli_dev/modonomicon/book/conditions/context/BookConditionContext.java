@@ -22,8 +22,8 @@ public abstract class BookConditionContext {
         return new BookConditionCategoryContext(book, category);
     }
 
-    public static BookConditionContext of(Book book, BookEntry bookEntry) {
-        return new BookConditionEntryContext(book, bookEntry);
+    public static BookConditionContext of(Book book, BookEntry entry) {
+        return new BookConditionEntryContext(book, entry);
     }
 
     public static BookConditionContext of(Book book, BookPage page) {

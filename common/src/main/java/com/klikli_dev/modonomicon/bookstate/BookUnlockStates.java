@@ -15,7 +15,6 @@ import com.klikli_dev.modonomicon.book.conditions.context.BookConditionContext;
 import com.klikli_dev.modonomicon.book.conditions.context.BookConditionEntryContext;
 import com.klikli_dev.modonomicon.book.conditions.context.BookConditionPageContext;
 import com.klikli_dev.modonomicon.book.entries.BookEntry;
-import com.klikli_dev.modonomicon.book.entries.ContentBookEntry;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
 import com.klikli_dev.modonomicon.book.page.BookPage;
 import com.klikli_dev.modonomicon.data.BookDataManager;
@@ -204,13 +203,13 @@ public class BookUnlockStates {
     /**
      * @return true if entry is now read, false if it was already read before.
      */
-    public boolean read(BookEntry bookEntry, ServerPlayer player) {
-        if (this.isRead(bookEntry))
+    public boolean read(BookEntry entry, ServerPlayer player) {
+        if (this.isRead(entry))
             return false;
 
-        this.readEntries.computeIfAbsent(bookEntry.getBook().getId(), k -> new HashSet<>()).add(bookEntry.getId());
+        this.readEntries.computeIfAbsent(entry.getBook().getId(), k -> new HashSet<>()).add(entry.getId());
 
-        var command = bookEntry.getCommandToRunOnFirstRead();
+        var command = entry.getCommandToRunOnFirstRead();
         if (command != null) {
             command.execute(player);
         }
@@ -236,10 +235,10 @@ public class BookUnlockStates {
         return this.usedCommands.getOrDefault(command.getBook().getId(), new HashMap<>()).getOrDefault(command.getId(), 0) < command.getMaxUses();
     }
 
-    public boolean isRead(BookEntry bookEntry) {
-        if (bookEntry.getBook() == null)
+    public boolean isRead(BookEntry entry) {
+        if (entry.getBook() == null)
             return false;
-        return this.readEntries.getOrDefault(bookEntry.getBook().getId(), new HashSet<>()).contains(bookEntry.getId());
+        return this.readEntries.getOrDefault(entry.getBook().getId(), new HashSet<>()).contains(entry.getId());
     }
 
     public List<BookPage> getUnlockedPagesIn(BookEntry entry) {
@@ -256,10 +255,10 @@ public class BookUnlockStates {
                 .contains(page.getPageNumber());
     }
 
-    public boolean isUnlocked(BookEntry bookEntry) {
-        if (bookEntry.getBook() == null)
+    public boolean isUnlocked(BookEntry entry) {
+        if (entry.getBook() == null)
             return false;
-        return this.unlockedEntries.getOrDefault(bookEntry.getBook().getId(), new HashSet<>()).contains(bookEntry.getId());
+        return this.unlockedEntries.getOrDefault(entry.getBook().getId(), new HashSet<>()).contains(entry.getId());
     }
 
     public boolean isUnlocked(BookCategory category) {

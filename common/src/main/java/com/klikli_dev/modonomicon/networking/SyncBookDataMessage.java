@@ -77,10 +77,10 @@ public class SyncBookDataMessage implements Message {
                 int entryCount = buf.readVarInt();
                 for (int k = 0; k < entryCount; k++) {
                     ResourceLocation entryTypeId = buf.readResourceLocation();
-                    BookEntry bookEntry = LoaderRegistry.getEntryNetworkLoader(entryTypeId).fromNetwork(buf);
+                    BookEntry entry = LoaderRegistry.getEntryNetworkLoader(entryTypeId).fromNetwork(buf);
 
                     //link entry and category
-                    category.addEntry(bookEntry);
+                    category.addEntry(entry);
                 }
             }
 

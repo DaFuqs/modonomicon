@@ -40,12 +40,12 @@ public class BookVisualStateManager {
         return this.getStateFor(player).getCategoryState(category);
     }
 
-    public EntryVisualState getEntryStateFor(Player player, BookEntry bookEntry) {
-        return this.getStateFor(player).getEntryState(bookEntry);
+    public EntryVisualState getEntryStateFor(Player player, BookEntry entry) {
+        return this.getStateFor(player).getEntryState(entry);
     }
 
-    public void setEntryStateFor(ServerPlayer player, BookEntry bookEntry, EntryVisualState state) {
-        this.getStateFor(player).setEntryState(bookEntry, state);
+    public void setEntryStateFor(ServerPlayer player, BookEntry entry, EntryVisualState state) {
+        this.getStateFor(player).setEntryState(entry, state);
         this.saveData.setDirty();
     }
 

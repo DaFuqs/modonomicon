@@ -91,8 +91,8 @@ public class BookUnlockStateManager {
         return this.getStateFor(player).isUnlocked(category);
     }
 
-    public boolean isUnlockedFor(Player player, BookEntry bookEntry) {
-        return this.getStateFor(player).isUnlocked(bookEntry);
+    public boolean isUnlockedFor(Player player, BookEntry entry) {
+        return this.getStateFor(player).isUnlocked(entry);
     }
 
     public boolean isUnlockedFor(Player player, BookPage page) {
@@ -103,8 +103,8 @@ public class BookUnlockStateManager {
         return this.getStateFor(player).getUnlockedPagesIn(entry);
     }
 
-    public boolean isReadFor(Player player, BookEntry bookEntry) {
-        return this.getStateFor(player).isRead(bookEntry);
+    public boolean isReadFor(Player player, BookEntry entry) {
+        return this.getStateFor(player).isRead(entry);
     }
 
     public boolean canRunFor(Player player, BookCommand command) {
@@ -123,8 +123,8 @@ public class BookUnlockStateManager {
     /**
      * Modifies state, but does not call syncFor, needs to be done by the caller side if needed.
      */
-    public boolean readFor(ServerPlayer player, BookEntry bookEntry) {
-        return this.getStateFor(player).read(bookEntry, player);
+    public boolean readFor(ServerPlayer player, BookEntry entry) {
+        return this.getStateFor(player).read(entry, player);
     }
 
     public void onAdvancement(ServerPlayer player) {

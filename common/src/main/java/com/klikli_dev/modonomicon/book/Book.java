@@ -347,8 +347,8 @@ public class Book {
         return this.categories.values().stream().sorted(Comparator.comparingInt(BookCategory::getSortNumber)).toList();
     }
 
-    public void addEntry(BookEntry bookEntry) {
-        this.entries.putIfAbsent(bookEntry.getId(), bookEntry);
+    public void addEntry(BookEntry entry) {
+        this.entries.putIfAbsent(entry.getId(), entry);
     }
 
     public BookEntry getEntry(ResourceLocation id) {

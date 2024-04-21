@@ -190,8 +190,8 @@ public class BookCategory {
         return this.entries;
     }
 
-    public void addEntry(BookEntry bookEntry) {
-        this.entries.putIfAbsent(bookEntry.getId(), bookEntry);
+    public void addEntry(BookEntry entry) {
+        this.entries.putIfAbsent(entry.getId(), entry);
     }
 
     public BookEntry getEntry(ResourceLocation id) {

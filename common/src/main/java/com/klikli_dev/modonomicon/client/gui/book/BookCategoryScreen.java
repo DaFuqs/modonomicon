@@ -141,12 +141,12 @@ public class BookCategoryScreen {
         return false;
     }
 
-    public @Nullable BookContentScreen openEntry(BookEntry bookEntry) {
-        if (!BookUnlockStateManager.get().isReadFor(Minecraft.getInstance().player, bookEntry)) {
-            Services.NETWORK.sendToServer(new BookEntryReadMessage(bookEntry.getBook().getId(), bookEntry.getId()));
+    public @Nullable BookContentScreen openEntry(BookEntry entry) {
+        if (!BookUnlockStateManager.get().isReadFor(Minecraft.getInstance().player, entry)) {
+            Services.NETWORK.sendToServer(new BookEntryReadMessage(entry.getBook().getId(), entry.getId()));
         }
         
-        return bookEntry.openEntry(this);
+        return entry.openEntry(this);
     }
 
     public @Nullable BookContentScreen openContentEntry(ContentBookEntry entry) {
@@ -217,14 +217,14 @@ public class BookCategoryScreen {
     }
 
 
-    private EntryDisplayState getEntryDisplayState(BookEntry bookEntry) {
+    private EntryDisplayState getEntryDisplayState(BookEntry entry) {
         var player = this.bookOverviewScreen.getMinecraft().player;
 
-        var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, bookEntry);
+        var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, entry);
 
         var anyParentsUnlocked = false;
         var allParentsUnlocked = true;
-        for (var parent : bookEntry.getParents()) {
+        for (var parent : entry.getParents()) {
             if (!BookUnlockStateManager.get().isUnlockedFor(player, parent.getEntry())) {
                 allParentsUnlocked = false;
             } else {
@@ -232,14 +232,14 @@ public class BookCategoryScreen {
             }
         }
 
-        if (bookEntry.showWhenAnyParentUnlocked() && !anyParentsUnlocked)
+        if (entry.showWhenAnyParentUnlocked() && !anyParentsUnlocked)
             return EntryDisplayState.HIDDEN;
 
-        if (!bookEntry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
+        if (!entry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
             return EntryDisplayState.HIDDEN;
 
         if (!isEntryUnlocked)
-            return bookEntry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
+            return entry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
 
         return EntryDisplayState.UNLOCKED;
     }
@@ -342,9 +342,9 @@ public class BookCategoryScreen {
         }
     }
 
-    private boolean isEntryHovered(BookEntry bookEntry, float xOffset, float yOffset, int mouseX, int mouseY) {
-        int x = (int) ((bookEntry.getX() * ENTRY_GRID_SCALE + xOffset + 2) * this.currentZoom);
-        int y = (int) ((bookEntry.getY() * ENTRY_GRID_SCALE + yOffset + 2) * this.currentZoom);
+    private boolean isEntryHovered(BookEntry entry, float xOffset, float yOffset, int mouseX, int mouseY) {
+        int x = (int) ((entry.getX() * ENTRY_GRID_SCALE + xOffset + 2) * this.currentZoom);
+        int y = (int) ((entry.getY() * ENTRY_GRID_SCALE + yOffset + 2) * this.currentZoom);
         int innerX = this.bookOverviewScreen.getInnerX();
         int innerY = this.bookOverviewScreen.getInnerY();
         int innerWidth = this.bookOverviewScreen.getInnerWidth();
@@ -355,20 +355,20 @@ public class BookCategoryScreen {
                 && mouseY >= innerY && mouseY <= innerY + innerHeight;
     }
 
-    private void renderTooltip(GuiGraphics guiGraphics, BookEntry bookEntry, EntryDisplayState displayState, float xOffset, float yOffset, int mouseX, int mouseY) {
+    private void renderTooltip(GuiGraphics guiGraphics, BookEntry entry, EntryDisplayState displayState, float xOffset, float yOffset, int mouseX, int mouseY) {
         //hovered?
-        if (this.isEntryHovered(bookEntry, xOffset, yOffset, mouseX, mouseY)) {
+        if (this.isEntryHovered(entry, xOffset, yOffset, mouseX, mouseY)) {
 
             var tooltip = new ArrayList<Component>();
 
             if (displayState == EntryDisplayState.LOCKED) {
-                tooltip.addAll(bookEntry.getCondition().getTooltip(this.bookOverviewScreen.getMinecraft().player, BookConditionEntryContext.of(this.bookOverviewScreen.getBook(), bookEntry)));
+                tooltip.addAll(entry.getCondition().getTooltip(this.bookOverviewScreen.getMinecraft().player, BookConditionEntryContext.of(this.bookOverviewScreen.getBook(), entry)));
             } else if (displayState == EntryDisplayState.UNLOCKED) {
                 //add name in bold
-                tooltip.add(Component.translatable(bookEntry.getName()).withStyle(ChatFormatting.BOLD));
+                tooltip.add(Component.translatable(entry.getName()).withStyle(ChatFormatting.BOLD));
                 //add description
-                if (!bookEntry.getDescription().isEmpty()) {
-                    tooltip.add(Component.translatable(bookEntry.getDescription()));
+                if (!entry.getDescription().isEmpty()) {
+                    tooltip.add(Component.translatable(entry.getDescription()));
                 }
             }
 
@@ -378,11 +378,11 @@ public class BookCategoryScreen {
         }
     }
 
-    private void renderConnections(GuiGraphics guiGraphics, BookEntry bookEntry, float xOffset, float yOffset) {
+    private void renderConnections(GuiGraphics guiGraphics, BookEntry entry, float xOffset, float yOffset) {
         //our arrows are aliased and need blending
         RenderSystem.enableBlend();
 
-        for (var parent : bookEntry.getParents()) {
+        for (var parent : entry.getParents()) {
             var parentDisplayState = this.getEntryDisplayState(parent.getEntry());
             if (parentDisplayState == EntryDisplayState.HIDDEN)
                 continue;
@@ -391,7 +391,7 @@ public class BookCategoryScreen {
             this.connectionRenderer.setBlitOffset(blitOffset);
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(xOffset, yOffset, 0);
-            this.connectionRenderer.render(guiGraphics, bookEntry, parent);
+            this.connectionRenderer.render(guiGraphics, entry, parent);
             guiGraphics.pose().popPose();
         }
 
