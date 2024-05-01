@@ -10,7 +10,6 @@ import com.google.gson.*;
 import com.klikli_dev.modonomicon.api.*;
 import com.klikli_dev.modonomicon.book.*;
 import com.klikli_dev.modonomicon.book.conditions.BookCondition;
-import com.klikli_dev.modonomicon.book.conditions.BookNoneCondition;
 import com.klikli_dev.modonomicon.book.error.BookErrorManager;
 import com.klikli_dev.modonomicon.book.page.BookPage;
 import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
@@ -29,8 +28,8 @@ public class ContentBookEntry extends BookEntry {
 
     protected List<BookPage> pages;
 
-    public ContentBookEntry(ResourceLocation id, ResourceLocation categoryId, String name, String description, BookIcon icon, int x, int y, int entryBackgroundUIndex, int entryBackgroundVIndex, boolean hideWhileLocked, boolean showWhenAnyParentUnlocked, BookCondition condition, List<BookEntryParent> parents, ResourceLocation commandToRunOnFirstReadId, List<BookPage> pages) {
-        super(id, categoryId, parents, name, description, icon, x, y, entryBackgroundUIndex, entryBackgroundVIndex, hideWhileLocked, showWhenAnyParentUnlocked, condition, commandToRunOnFirstReadId);
+    public ContentBookEntry(ResourceLocation id, BookEntryData data, ResourceLocation commandToRunOnFirstReadId, List<BookPage> pages) {
+        super(id, data, commandToRunOnFirstReadId);
         this.pages = pages;
     }
     
@@ -39,36 +38,14 @@ public class ContentBookEntry extends BookEntry {
         return ModonomiconConstants.Data.EntryType.CONTENT;
     }
 
-    public static ContentBookEntry fromJson(ResourceLocation id, JsonObject json) {
-        var categoryId = new ResourceLocation(GsonHelper.getAsString(json, "category"));
-        var name = GsonHelper.getAsString(json, "name");
-        var description = GsonHelper.getAsString(json, "description", "");
-        var icon = BookIcon.fromJson(json.get("icon"));
-        var x = GsonHelper.getAsInt(json, "x");
-        var y = GsonHelper.getAsInt(json, "y");
-        var entryBackgroundUIndex = GsonHelper.getAsInt(json, "background_u_index", 0);
-        var entryBackgroundVIndex = GsonHelper.getAsInt(json, "background_v_index", 0);
-        var hideWhileLocked = GsonHelper.getAsBoolean(json, "hide_while_locked", false);
-        var showWhenAnyParentUnlocked = GsonHelper.getAsBoolean(json, "show_when_any_parent_unlocked", false);
+    public static ContentBookEntry fromJson(ResourceLocation id, JsonObject json, boolean autoAddReadConditions) {
+        BookEntryData data = BookEntryData.fromJson(json, autoAddReadConditions);
 
-        var parentEntries = new ArrayList<BookEntryParent>();
-
-        if (json.has("parents")) {
-            JsonArray parents = GsonHelper.getAsJsonArray(json, "parents");
-            for (var parent : parents) {
-                parentEntries.add(BookEntryParent.fromJson(parent.getAsJsonObject()));
-            }
-        }
-        BookCondition condition = new BookNoneCondition(); //default to unlocked
-        if (json.has("condition")) {
-            condition = BookCondition.fromJson(json.getAsJsonObject("condition"));
-        }
-        
         ResourceLocation commandToRunOnFirstReadId = null;
         if (json.has("command_to_run_on_first_read")) {
             commandToRunOnFirstReadId = new ResourceLocation(GsonHelper.getAsString(json, "command_to_run_on_first_read"));
         }
-        
+
         var pages = new ArrayList<BookPage>();
         if (json.has("pages")) {
             var jsonPages = GsonHelper.getAsJsonArray(json, "pages");
@@ -82,12 +59,14 @@ public class ContentBookEntry extends BookEntry {
             }
         }
         
-        return new ContentBookEntry(id, categoryId, name, description, icon, x, y, entryBackgroundUIndex, entryBackgroundVIndex, hideWhileLocked, showWhenAnyParentUnlocked, condition, parentEntries, commandToRunOnFirstReadId, pages);
+        return new ContentBookEntry(id, data, commandToRunOnFirstReadId, pages);
     }
-    
+
     @Override
     public void toNetwork(FriendlyByteBuf buffer) {
-        super.toNetwork(buffer);
+        buffer.writeResourceLocation(this.id);
+        this.data.toNetwork(buffer);
+        buffer.writeNullable(this.commandToRunOnFirstReadId, FriendlyByteBuf::writeResourceLocation);
         
         buffer.writeVarInt(this.pages.size());
         for (var page : this.pages) {
@@ -98,27 +77,9 @@ public class ContentBookEntry extends BookEntry {
     
     public static ContentBookEntry fromNetwork(FriendlyByteBuf buffer) {
         var id = buffer.readResourceLocation();
-        var categoryId = buffer.readResourceLocation();
-        var name = buffer.readUtf();
-        var description = buffer.readUtf();
-        var icon = BookIcon.fromNetwork(buffer);
-        var x = buffer.readVarInt();
-        var y = buffer.readVarInt();
-        var entryBackgroundUIndex = buffer.readVarInt();
-        var entryBackgroundVIndex = buffer.readVarInt();
-        var hideWhileLocked = buffer.readBoolean();
-        var showWhenAnyParentUnlocked = buffer.readBoolean();
-        
-        var parentEntries = new ArrayList<BookEntryParent>();
-        
-        var parentCount = buffer.readVarInt();
-        for (var i = 0; i < parentCount; i++) {
-            parentEntries.add(BookEntryParent.fromNetwork(buffer));
-        }
-        
-        var condition = BookCondition.fromNetwork(buffer);
+        BookEntryData data = BookEntryData.fromNetwork(buffer);
         ResourceLocation commandToRunOnFirstReadId = buffer.readNullable(FriendlyByteBuf::readResourceLocation);
-        
+
         var pages = new ArrayList<BookPage>();
         var pageCount = buffer.readVarInt();
         for (var i = 0; i < pageCount; i++) {
@@ -128,7 +89,7 @@ public class ContentBookEntry extends BookEntry {
             pages.add(page);
         }
         
-        return new ContentBookEntry(id, categoryId, name, description, icon, x, y, entryBackgroundUIndex, entryBackgroundVIndex, hideWhileLocked, showWhenAnyParentUnlocked, condition, parentEntries, commandToRunOnFirstReadId, pages);
+        return new ContentBookEntry(id, data, commandToRunOnFirstReadId, pages);
     }
     
     /**

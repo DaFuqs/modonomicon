@@ -147,42 +147,20 @@ public class BookDataManager extends SimpleJsonResourceReloadListener {
         Modonomicon.LOG.info("Finished pre-rendering markdown.");
     }
 
-    public void addReadConditions() {
-        for (var book : this.books.values()) {
-            if (book.autoAddReadConditions()) {
-                for (var entry : book.getEntries().values()) {
-                    if (entry.getCondition().getType().equals(Condition.NONE)) {
-                        if (entry.getParents().size() == 1) {
-                            entry.setCondition(new BookEntryReadCondition(null, entry.getParents().get(0).getEntryId()));
-                        } else if (entry.getParents().size() > 1) {
-                            var conditions = entry.getParents().stream().map(parent ->
-                                    new BookEntryReadCondition(null, parent.getEntryId())).toList();
-                            var andCondition = new BookAndCondition(null, conditions.toArray(new BookEntryReadCondition[0]));
-                            entry.setCondition(andCondition);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * On server, called on datapack sync (because we need the data before we send the datapack sync packet) On client,
      * called on recipes updated, because recipes are available to the client only after datapack sync is complete
      */
     public boolean tryBuildBooks(Level level) {
-        if (!this.booksBuilt) {
-            Modonomicon.LOG.info("Building books ...");
-            this.buildBooks(level);
-            this.booksBuilt = true;
-            Modonomicon.LOG.info("Books built.");
-
-            Modonomicon.LOG.info("Adding read conditions ...");
-            this.addReadConditions();
-            Modonomicon.LOG.info("Read conditions added.");
-            return true;
+        if (this.booksBuilt) {
+            return false;
         }
-        return false;
+
+        Modonomicon.LOG.info("Building books ...");
+        this.buildBooks(level);
+        this.booksBuilt = true;
+        Modonomicon.LOG.info("Books built.");
+        return true;
     }
 
     protected void onLoadingComplete() {
@@ -197,19 +175,19 @@ public class BookDataManager extends SimpleJsonResourceReloadListener {
         return BookCategory.fromJson(key, value);
     }
 
-    private BookEntry loadEntry(ResourceLocation id, JsonObject value) {
+    private BookEntry loadEntry(ResourceLocation id, JsonObject value, boolean autoAddReadConditions) {
         if(value.has("type")) {
             ResourceLocation typeId = ResourceLocation.tryParse(value.get("type").getAsString());
-            return LoaderRegistry.getEntryJsonLoader(typeId).fromJson(id, value);
+            return LoaderRegistry.getEntryJsonLoader(typeId).fromJson(id, value, autoAddReadConditions);
         }
         
         // This part here is for backwards compatibility and simplicity
         // If an entry does not have a type specified, ContentEntry is assumed
         // unless it has a property called "category_to_open" (CategoryLinkEntry)
         if(value.has("category_to_open")) {
-            return CategoryLinkBookEntry.fromJson(id, value);
+            return CategoryLinkBookEntry.fromJson(id, value, autoAddReadConditions);
         }
-        return ContentBookEntry.fromJson(id, value);
+        return ContentBookEntry.fromJson(id, value, autoAddReadConditions);
     }
 
     private BookCommand loadCommand(ResourceLocation key, JsonObject value) {
@@ -340,7 +318,7 @@ public class BookDataManager extends SimpleJsonResourceReloadListener {
                     continue;
                 }
 
-                var bookEntry = this.loadEntry(entryId, entry.getValue());
+                var bookEntry = this.loadEntry(entryId, entry.getValue(), books.get(bookId).autoAddReadConditions());
 
                 //link entry and category
                 var book = this.books.get(bookId);

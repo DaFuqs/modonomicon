@@ -9,6 +9,6 @@ package com.klikli_dev.modonomicon.data;
 import com.google.gson.*;
 import net.minecraft.resources.*;
 
-public interface IDJsonLoader<T> {
-    T fromJson(ResourceLocation id, JsonObject json);
+public interface BookEntryJsonLoader<T> {
+    T fromJson(ResourceLocation id, JsonObject json, boolean autoAddReadConditions);
 }

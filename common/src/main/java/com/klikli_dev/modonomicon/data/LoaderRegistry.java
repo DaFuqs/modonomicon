@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LoaderRegistry {
     
-    private static final Map<ResourceLocation, IDJsonLoader<? extends BookEntry>> entryTypeJsonLoaders = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, BookEntryJsonLoader<? extends BookEntry>> entryTypeJsonLoaders = new ConcurrentHashMap<>();
     private static final Map<ResourceLocation, NetworkLoader<? extends BookEntry>> entryTypeNetworkLoaders = new ConcurrentHashMap<>();
 
     private static final Map<ResourceLocation, JsonLoader<? extends BookPage>> pageJsonLoaders = new ConcurrentHashMap<>();
@@ -118,7 +118,8 @@ public class LoaderRegistry {
     /**
      * Call from client setup
      */
-    public static void registerEntryType(ResourceLocation id, IDJsonLoader<? extends BookEntry> jsonLoader, NetworkLoader<? extends BookEntry> networkLoader) {
+    public static void registerEntryType(ResourceLocation id, BookEntryJsonLoader<? extends BookEntry> jsonLoader,
+                                         NetworkLoader<? extends BookEntry> networkLoader) {
         entryTypeJsonLoaders.put(id, jsonLoader);
         entryTypeNetworkLoaders.put(id, networkLoader);
     }
@@ -166,7 +167,7 @@ public class LoaderRegistry {
         predicates.put(id, predicate);
     }
     
-    public static IDJsonLoader<? extends BookEntry> getEntryJsonLoader(ResourceLocation id) {
+    public static BookEntryJsonLoader<? extends BookEntry> getEntryJsonLoader(ResourceLocation id) {
         var loader = entryTypeJsonLoaders.get(id);
         if (loader == null) {
             throw new IllegalArgumentException("No json loader registered for entry type " + id);
