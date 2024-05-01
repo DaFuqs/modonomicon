@@ -61,10 +61,12 @@ public abstract class BookEntry {
 	 * call after loading the book jsons to finalize.
 	 */
 	public void build(Level level, BookCategory category) {
+		this.book = category.getBook();
+		this.category = category;
 
 		//resolve parents
 		var newParents = new ArrayList<ResolvedBookEntryParent>();
-		for (var parent : getParents()) {
+		for (var parent : this.data.parents) {
 			var parentEntry = this.getBook().getEntry(parent.getEntryId());
 			if (parentEntry == null) {
 				BookErrorManager.get().error("Entry \"" + this.getId() + "\" has a parent that does not exist in this book: \"" + parent.getEntryId() + "\". This parent will be ignored");
@@ -233,11 +235,13 @@ public abstract class BookEntry {
 			buffer.writeBoolean(this.hideWhileLocked);
 			buffer.writeBoolean(this.showWhenAnyParentUnlocked);
 
+			buffer.writeResourceLocation(this.condition.getType());
+			this.condition.toNetwork(buffer);
+
 			buffer.writeVarInt(this.parents.size());
 			for (var parent : this.parents) {
 				parent.toNetwork(buffer);
 			}
-			this.condition.toNetwork(buffer);
 		}
 
 		public static BookEntryData fromNetwork(FriendlyByteBuf buffer) {
@@ -251,14 +255,13 @@ public abstract class BookEntry {
 			var entryBackgroundVIndex = buffer.readVarInt();
 			var hideWhileLocked = buffer.readBoolean();
 			var showWhenAnyParentUnlocked = buffer.readBoolean();
+			var condition = BookCondition.fromNetwork(buffer);
 
 			var parentEntries = new ArrayList<BookEntryParent>();
 			var parentCount = buffer.readVarInt();
 			for (var i = 0; i < parentCount; i++) {
 				parentEntries.add(BookEntryParent.fromNetwork(buffer));
 			}
-
-			var condition = BookCondition.fromNetwork(buffer);
 
 			return new BookEntryData(categoryId, parentEntries, x, y, name, description, icon, entryBackgroundUIndex, entryBackgroundVIndex, condition, hideWhileLocked, showWhenAnyParentUnlocked);
 		}
