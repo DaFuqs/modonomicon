@@ -7,9 +7,8 @@
 package com.klikli_dev.modonomicon.bookstate;
 
 import com.klikli_dev.modonomicon.Modonomicon;
-import com.klikli_dev.modonomicon.book.Book;
-import com.klikli_dev.modonomicon.book.BookCategory;
-import com.klikli_dev.modonomicon.book.BookEntry;
+import com.klikli_dev.modonomicon.book.*;
+import com.klikli_dev.modonomicon.book.entries.*;
 import com.klikli_dev.modonomicon.bookstate.visual.BookVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.CategoryVisualState;
 import com.klikli_dev.modonomicon.bookstate.visual.EntryVisualState;
@@ -18,7 +17,6 @@ import com.klikli_dev.modonomicon.networking.SyncBookVisualStatesMessage;
 import com.klikli_dev.modonomicon.platform.Services;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 public class BookVisualStateManager {
 
