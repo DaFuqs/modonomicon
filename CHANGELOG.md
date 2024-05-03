@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [release/v1.20.1-1.70.0] - 2024-05-01
+### :sparkles: New Features
+- [`0f37485`](https://github.com/klikli-dev/modonomicon/commit/0f37485e1090acf30d1b74a5dadf49b02ec7cfdc) - Dynamic BookEntries *(PR [#202](https://github.com/klikli-dev/modonomicon/pull/202) by [@DaFuqs](https://github.com/DaFuqs))*
+
+
 ## [release/v1.20.1-1.69.0] - 2024-04-16
 ### :sparkles: New Features
 - [`d72503b`](https://github.com/klikli-dev/modonomicon/commit/d72503be337b86f351c34ecebc59060e70036f28) - make modonomicon content registrations threadsafe *(commit by [@klikli-dev](https://github.com/klikli-dev))*
@@ -787,3 +792,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [release/v1.20.1-1.67.1]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.67.0...release/v1.20.1-1.67.1
 [release/v1.20.1-1.68.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.67.1...release/v1.20.1-1.68.0
 [release/v1.20.1-1.69.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.68.0...release/v1.20.1-1.69.0
+[release/v1.20.1-1.70.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.69.0...release/v1.20.1-1.70.0
