@@ -125,11 +125,15 @@ tasks.named("sourcesJar", Jar) {
 
 tasks.named('jar') {
     archiveClassifier = "slim"
+    processResources.exclude("**/data/modonomicon/modonomicon/books/**")
+    processResources.exclude("**/data/modonomicon/modonomicon/multiblocks/**")
     finalizedBy('reobfJar')
 }
 
 tasks.named('jarJar') {
     archiveClassifier = ""
+    processResources.exclude("**/data/modonomicon/modonomicon/books/**")
+    processResources.exclude("**/data/modonomicon/modonomicon/multiblocks/**")
     finalizedBy('reobfJar')
 }
 
