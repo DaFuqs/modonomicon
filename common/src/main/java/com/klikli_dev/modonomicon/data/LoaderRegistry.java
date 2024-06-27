@@ -17,6 +17,7 @@ import com.klikli_dev.modonomicon.book.conditions.*;
 import com.klikli_dev.modonomicon.book.entries.BookContentEntry;
 import com.klikli_dev.modonomicon.book.entries.BookEntry;
 import com.klikli_dev.modonomicon.book.entries.CategoryLinkBookEntry;
+import com.klikli_dev.modonomicon.book.entries.EntryLinkBookEntry;
 import com.klikli_dev.modonomicon.book.page.*;
 import com.klikli_dev.modonomicon.multiblock.DenseMultiblock;
 import com.klikli_dev.modonomicon.multiblock.SparseMultiblock;
@@ -65,6 +66,7 @@ public class LoaderRegistry {
     private static void registerDefaultBookEntryTypes() {
         registerEntryType(ModonomiconConstants.Data.EntryType.CONTENT, BookContentEntry::fromJson, BookContentEntry::fromNetwork);
         registerEntryType(ModonomiconConstants.Data.EntryType.CATEGORY_LINK, CategoryLinkBookEntry::fromJson, CategoryLinkBookEntry::fromNetwork);
+        registerEntryType(ModonomiconConstants.Data.EntryType.ENTRY_LINK, EntryLinkBookEntry::fromJson, EntryLinkBookEntry::fromNetwork);
     }
 
     private static void registerDefaultPageLoaders() {

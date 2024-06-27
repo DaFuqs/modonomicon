@@ -68,6 +68,7 @@ public class ModonomiconConstants {
         public static class EntryType {
             public static final ResourceLocation CONTENT = ResourceLocation.fromNamespaceAndPath(ModonomiconAPI.ID, "content");
             public static final ResourceLocation CATEGORY_LINK = ResourceLocation.fromNamespaceAndPath(ModonomiconAPI.ID, "category_link");
+            public static final ResourceLocation ENTRY_LINK = ResourceLocation.fromNamespaceAndPath(ModonomiconAPI.ID, "entry_link");
         }
 
         public static class Page {
