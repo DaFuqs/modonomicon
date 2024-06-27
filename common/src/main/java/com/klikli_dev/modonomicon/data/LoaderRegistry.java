@@ -7,14 +7,17 @@
 package com.klikli_dev.modonomicon.data;
 
 import com.klikli_dev.modonomicon.Modonomicon;
-import com.klikli_dev.modonomicon.api.*;
+import com.klikli_dev.modonomicon.api.ModonomiconConstants;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Condition;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Page;
 import com.klikli_dev.modonomicon.api.multiblock.Multiblock;
 import com.klikli_dev.modonomicon.api.multiblock.StateMatcher;
 import com.klikli_dev.modonomicon.api.multiblock.TriPredicate;
 import com.klikli_dev.modonomicon.book.conditions.*;
-import com.klikli_dev.modonomicon.book.entries.*;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.CategoryLinkBookEntry;
+import com.klikli_dev.modonomicon.book.entries.ContentBookEntry;
+import com.klikli_dev.modonomicon.book.entries.EntryLinkBookEntry;
 import com.klikli_dev.modonomicon.book.page.*;
 import com.klikli_dev.modonomicon.multiblock.DenseMultiblock;
 import com.klikli_dev.modonomicon.multiblock.SparseMultiblock;
@@ -62,6 +65,7 @@ public class LoaderRegistry {
     private static void registerDefaultBookEntryTypes() {
         registerEntryType(ModonomiconConstants.Data.EntryType.CONTENT, ContentBookEntry::fromJson, ContentBookEntry::fromNetwork);
         registerEntryType(ModonomiconConstants.Data.EntryType.CATEGORY_LINK, CategoryLinkBookEntry::fromJson, CategoryLinkBookEntry::fromNetwork);
+        registerEntryType(ModonomiconConstants.Data.EntryType.ENTRY_LINK, EntryLinkBookEntry::fromJson, EntryLinkBookEntry::fromNetwork);
     }
 
     private static void registerDefaultPageLoaders() {
