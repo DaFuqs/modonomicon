@@ -117,6 +117,12 @@ public class ModonomiconForge {
         //Advancement event handling for condition/unlock system
         MinecraftForge.EVENT_BUS.addListener((AdvancementEvent.AdvancementEarnEvent e) -> BookUnlockStateManager.get().onAdvancement((ServerPlayer) e.getEntity()));
 
+        //We use server tick to flush the queue of players that need a book state sync
+        MinecraftForge.EVENT_BUS.addListener(((TickEvent.ServerTickEvent e) -> {
+            if(e.phase == TickEvent.Phase.END)
+                BookUnlockStateManager.get().onServerTickEnd(e.getServer());
+        }));
+
         //Datagen
         modEventBus.addListener(DataGenerators::gatherData);
 

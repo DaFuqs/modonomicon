@@ -21,6 +21,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -86,6 +87,11 @@ public class ModonomiconFabric implements ModInitializer {
                 BookUnlockStateManager.get().saveData = null;
                 BookVisualStateManager.get().saveData = null;
             }
+        });
+
+        //We use server tick to flush the queue of players that need a book state sync
+        ServerTickEvents.END_SERVER_TICK.register((server) -> {
+            BookUnlockStateManager.get().onServerTickEnd(server);
         });
 
         //Advancement event handling for condition/unlock system

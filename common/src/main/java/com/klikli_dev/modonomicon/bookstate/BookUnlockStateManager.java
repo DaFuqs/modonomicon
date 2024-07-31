@@ -16,21 +16,22 @@ import com.klikli_dev.modonomicon.data.BookDataManager;
 import com.klikli_dev.modonomicon.networking.RequestSyncBookStatesMessage;
 import com.klikli_dev.modonomicon.networking.SyncBookUnlockStatesMessage;
 import com.klikli_dev.modonomicon.platform.Services;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
+import java.util.UUID;
 
 public class BookUnlockStateManager {
 
     private static final BookUnlockStateManager instance = new BookUnlockStateManager();
+    private final Set<UUID> syncRequestedPlayers = new ObjectLinkedOpenHashSet<>();
     public BookStatesSaveData saveData;
-    protected ScheduledExecutorService updateAndSyncTimer;
+    private boolean wasLoaded = false;
 
     public static BookUnlockStateManager get() {
         return instance;
@@ -64,33 +65,8 @@ public class BookUnlockStateManager {
             this.saveData.setDirty();
             this.syncFor(player);
         } else {
-            //we have some edge cases where RecipesUpdatedEvent is fired after EntityJoinLevelEvent.
-            //in SP this means that books are not built yet when updateAndSyncFor is called for the first time.
-            //so we poll until it is available.
-
-            //if timer already shut down, set to null so a new one will be created
-            if (this.updateAndSyncTimer != null && this.updateAndSyncTimer.isShutdown()) {
-                this.updateAndSyncTimer = null;
-            }
-
-            //if we don't have a timer yet, create one
-            if (this.updateAndSyncTimer == null) {
-                this.updateAndSyncTimer = Executors.newSingleThreadScheduledExecutor();
-            }
-
-            final var currentTimer = this.updateAndSyncTimer;
-            //then schedule a task to run in 5 seconds
-            this.updateAndSyncTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    player.server.execute(() -> {
-                        BookUnlockStateManager.this.updateAndSyncFor(player);
-
-                        //we also shut down the timer to free the thread, as this is only rarely used.
-                        currentTimer.shutdown();
-                    });
-                }
-            }, 5, TimeUnit.SECONDS);
+            this.syncRequestedPlayers.add(player.getUUID());
+            this.wasLoaded = false;
         }
     }
 
@@ -165,6 +141,22 @@ public class BookUnlockStateManager {
                 Services.NETWORK.sendToServer(new RequestSyncBookStatesMessage());
                 Modonomicon.LOG.error("Tried to get Modonomicon save data for player on client side, but was not set. This should not happen. Requesting a sync from the server. Please re-open the book in a few seconds to see your progress.");
             }
+        }
+    }
+
+    public void onServerTickEnd(MinecraftServer server) {
+        if (server.getTickCount() % 100 != 0) return; //We only update every 5 seconds (100 ticks)
+        boolean newState = BookDataManager.get().areBooksBuilt();
+        if (newState != this.wasLoaded) { // we only check for things if the state changed for some reason.
+            if (!this.wasLoaded && !this.syncRequestedPlayers.isEmpty()) { //we only process players if we have any and the state was correct.
+                var list = server.getPlayerList();
+                for (UUID id : this.syncRequestedPlayers) {
+                    ServerPlayer player = list.getPlayer(id);
+                    if (player != null) this.updateAndSyncFor(player);
+                }
+                this.syncRequestedPlayers.clear();
+            }
+            this.wasLoaded = newState;
         }
     }
 }
