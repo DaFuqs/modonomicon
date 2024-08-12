@@ -136,7 +136,7 @@ public class CoreComponentNodeRenderer extends AbstractVisitor implements NodeRe
             //List bullets/numbers will not be affected by current style
             this.context.getCurrentComponent().append(Component.translatable(
                             orderedListHolder.getIndent() + orderedListHolder.getCounter() + orderedListHolder.getDelimiter() + " ")
-                    .withStyle(Style.EMPTY));
+                    .withStyle(Style.EMPTY).withStyle(s -> s.withFont(this.context.getCurrentStyle().getFont())));
 
             this.visitChildren(listItem);
             orderedListHolder.increaseCounter();
@@ -144,7 +144,7 @@ public class CoreComponentNodeRenderer extends AbstractVisitor implements NodeRe
             //List bullets/numbers will not be affected by current style
             this.context.getCurrentComponent().append(Component.translatable(
                             bulletListHolder.getIndent() + bulletListHolder.getMarker() + " ")
-                    .withStyle(Style.EMPTY));
+                    .withStyle(Style.EMPTY).withStyle(s -> s.withFont(this.context.getCurrentStyle().getFont())));
             this.visitChildren(listItem);
         }
     }
