@@ -8,16 +8,16 @@
 
 package com.klikli_dev.modonomicon.api.datagen.book.condition;
 
-import com.google.gson.*;
-import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.*;
-import net.minecraft.network.chat.*;
-import net.minecraft.resources.*;
+import com.google.gson.JsonObject;
+import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Condition;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
-public class BookCategoryHasEntriesConditionModel extends BookConditionModel {
+public class BookCategoryHasVisibleEntriesConditionModel extends BookConditionModel {
     protected String categoryId;
 
-    protected BookCategoryHasEntriesConditionModel(String categoryId, Component tooltip, String tooltipString) {
-        super(Condition.CATEGORY_HAS_ENTRIES, tooltip, tooltipString);
+    protected BookCategoryHasVisibleEntriesConditionModel(String categoryId, Component tooltip, String tooltipString) {
+        super(Condition.CATEGORY_HAS_VISIBLE_ENTRIES, tooltip, tooltipString);
         this.categoryId = categoryId;
     }
 
@@ -83,8 +83,8 @@ public class BookCategoryHasEntriesConditionModel extends BookConditionModel {
             return this;
         }
         
-        public BookCategoryHasEntriesConditionModel build() {
-            return new BookCategoryHasEntriesConditionModel(this.categoryId, this.tooltip, this.tooltipString);
+        public BookCategoryHasVisibleEntriesConditionModel build() {
+            return new BookCategoryHasVisibleEntriesConditionModel(this.categoryId, this.tooltip, this.tooltipString);
         }
     }
 }

@@ -10,8 +10,8 @@ import com.klikli_dev.modonomicon.Modonomicon;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.I18n.*;
-import com.klikli_dev.modonomicon.api.datagen.BookContextHelper;
 import com.klikli_dev.modonomicon.api.datagen.AbstractModonomiconLanguageProvider;
+import com.klikli_dev.modonomicon.api.datagen.BookContextHelper;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.registry.ItemRegistry;
 import net.minecraft.data.PackOutput;
@@ -73,7 +73,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(Tooltips.CONDITION_ADVANCEMENT_LOADING, "Loading ...");
         this.add(Tooltips.CONDITION_ADVANCEMENT_HIDDEN, "Hidden Advancement");
         this.add(Tooltips.CONDITION_ENTRY_UNLOCKED, "Requires unlocked Entry: %s");
-        this.add(Tooltips.CONDITION_CATEGORY_HAS_ENTRIES, "Requires that category %s has loaded entries");
+        this.add(Tooltips.CONDITION_CATEGORY_HAS_VISIBLE_ENTRIES, "Requires that category %s has visible entries");
         this.add(Tooltips.CONDITION_MOD_LOADED, "Requires loaded mod: %s");
         this.add(Tooltips.CONDITION_ENTRY_READ, "Requires read Entry: %s\nHint: Mark all entries as read with the \"eye\" button at the top right.");
         this.add(Tooltips.ITEM_NO_BOOK_FOUND_FOR_STACK, "No book found for this item in the modonomicon book database! Nbt: %s");
