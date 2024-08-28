@@ -7,9 +7,11 @@
 package com.klikli_dev.modonomicon.client.gui.book;
 
 import com.klikli_dev.modonomicon.api.events.EntryClickedEvent;
-import com.klikli_dev.modonomicon.book.*;
-import com.klikli_dev.modonomicon.book.entries.*;
+import com.klikli_dev.modonomicon.book.BookCategory;
+import com.klikli_dev.modonomicon.book.BookCategoryBackgroundParallaxLayer;
 import com.klikli_dev.modonomicon.book.conditions.context.BookConditionEntryContext;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.ContentBookEntry;
 import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
 import com.klikli_dev.modonomicon.bookstate.BookVisualStateManager;
 import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
@@ -26,7 +28,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -221,6 +223,9 @@ public class BookCategoryScreen {
         var player = this.bookOverviewScreen.getMinecraft().player;
 
         var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, entry);
+        if(isEntryUnlocked) {
+            return EntryDisplayState.UNLOCKED;
+        }
 
         var anyParentsUnlocked = false;
         var allParentsUnlocked = true;
@@ -238,10 +243,7 @@ public class BookCategoryScreen {
         if (!entry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
             return EntryDisplayState.HIDDEN;
 
-        if (!isEntryUnlocked)
-            return entry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
-
-        return EntryDisplayState.UNLOCKED;
+        return entry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
     }
 
     private void renderEntries(GuiGraphics guiGraphics, int mouseX, int mouseY) {
