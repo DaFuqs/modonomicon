@@ -223,26 +223,32 @@ public class BookCategoryScreen {
         var player = this.bookOverviewScreen.getMinecraft().player;
 
         var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, entry);
-        if(isEntryUnlocked) {
+
+        // if an entry has its unlock condition met, it will always shop up
+        if (isEntryUnlocked) {
             return EntryDisplayState.UNLOCKED;
         }
 
-        var anyParentsUnlocked = false;
-        var allParentsUnlocked = true;
-        for (var parent : entry.getParents()) {
-            if (!BookUnlockStateManager.get().isUnlockedFor(player, parent.getEntry())) {
-                allParentsUnlocked = false;
-            } else {
-                anyParentsUnlocked = true;
+        // if an entry does have parents, it might be hidden
+        if (!entry.getParents().isEmpty()) {
+            var anyParentsUnlocked = false;
+            var allParentsUnlocked = true;
+            for (var parent : entry.getParents()) {
+                if (!BookUnlockStateManager.get().isUnlockedFor(player, parent.getEntry())) {
+                    allParentsUnlocked = false;
+                } else {
+                    anyParentsUnlocked = true;
+                }
             }
+
+            if (entry.showWhenAnyParentUnlocked() && !anyParentsUnlocked)
+                return EntryDisplayState.HIDDEN;
+
+            if (!entry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
+                return EntryDisplayState.HIDDEN;
         }
 
-        if (entry.showWhenAnyParentUnlocked() && !anyParentsUnlocked)
-            return EntryDisplayState.HIDDEN;
-
-        if (!entry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
-            return EntryDisplayState.HIDDEN;
-
+        // either the entry does not have any parents or any/all parents are unlocked
         return entry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
     }
 
