@@ -7,23 +7,28 @@
 
 package com.klikli_dev.modonomicon.book.entries;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.klikli_dev.modonomicon.api.ModonomiconConstants;
 import com.klikli_dev.modonomicon.book.*;
-import com.klikli_dev.modonomicon.book.conditions.*;
-import com.klikli_dev.modonomicon.book.error.*;
-import com.klikli_dev.modonomicon.book.page.*;
-import com.klikli_dev.modonomicon.client.gui.book.*;
-import com.klikli_dev.modonomicon.client.gui.book.markdown.*;
+import com.klikli_dev.modonomicon.book.conditions.BookAndCondition;
+import com.klikli_dev.modonomicon.book.conditions.BookCondition;
+import com.klikli_dev.modonomicon.book.conditions.BookEntryReadCondition;
+import com.klikli_dev.modonomicon.book.conditions.BookNoneCondition;
+import com.klikli_dev.modonomicon.book.error.BookErrorManager;
+import com.klikli_dev.modonomicon.book.page.BookPage;
+import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
+import com.klikli_dev.modonomicon.client.gui.book.BookCategoryScreen;
+import com.klikli_dev.modonomicon.client.gui.book.BookContentScreen;
+import com.klikli_dev.modonomicon.client.gui.book.EntryDisplayState;
+import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
 import com.klikli_dev.modonomicon.data.LoaderRegistry;
-import net.minecraft.network.*;
-import net.minecraft.resources.*;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.*;
-import net.minecraft.world.level.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BookEntry {
 
@@ -91,6 +96,37 @@ public abstract class BookEntry {
 				this.commandToRunOnFirstReadId = null;
 			}
 		}
+	}
+
+	public EntryDisplayState getEntryDisplayState(Player player) {
+		var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, this);
+
+		// if an entry has its unlock condition met, it will always shop up
+		if (isEntryUnlocked) {
+			return EntryDisplayState.UNLOCKED;
+		}
+
+		// if an entry does have parents, it might be hidden
+		if (!getParents().isEmpty()) {
+			var anyParentsUnlocked = false;
+			var allParentsUnlocked = true;
+			for (var parent : getParents()) {
+				if (!BookUnlockStateManager.get().isUnlockedFor(player, parent.getEntry())) {
+					allParentsUnlocked = false;
+				} else {
+					anyParentsUnlocked = true;
+				}
+			}
+
+			if (showWhenAnyParentUnlocked() && !anyParentsUnlocked)
+				return EntryDisplayState.HIDDEN;
+
+			if (!showWhenAnyParentUnlocked() && !allParentsUnlocked)
+				return EntryDisplayState.HIDDEN;
+		}
+
+		// either the entry does not have any parents or any/all parents are unlocked
+		return hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
 	}
 
 	public ResourceLocation getId() {

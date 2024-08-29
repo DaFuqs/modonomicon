@@ -7,9 +7,11 @@
 package com.klikli_dev.modonomicon.client.gui.book;
 
 import com.klikli_dev.modonomicon.api.events.EntryClickedEvent;
-import com.klikli_dev.modonomicon.book.*;
-import com.klikli_dev.modonomicon.book.entries.*;
+import com.klikli_dev.modonomicon.book.BookCategory;
+import com.klikli_dev.modonomicon.book.BookCategoryBackgroundParallaxLayer;
 import com.klikli_dev.modonomicon.book.conditions.context.BookConditionEntryContext;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.ContentBookEntry;
 import com.klikli_dev.modonomicon.bookstate.BookUnlockStateManager;
 import com.klikli_dev.modonomicon.bookstate.BookVisualStateManager;
 import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
@@ -26,7 +28,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -120,7 +122,7 @@ public class BookCategoryScreen {
         float xOffset = this.getXOffset();
         float yOffset = this.getYOffset();
         for (var entry : this.category.getEntries().values()) {
-            var displayStyle = this.getEntryDisplayState(entry);
+            var displayStyle = entry.getEntryDisplayState(this.bookOverviewScreen.getMinecraft().player);
 
             if (this.isEntryHovered(entry, xOffset, yOffset, (int) pMouseX, (int) pMouseY)) {
 
@@ -131,7 +133,7 @@ public class BookCategoryScreen {
                 }
 
                 //only if the entry is unlocked we open it
-                if (displayStyle == EntryDisplayState.UNLOCKED) {
+                if (displayStyle.isUnlocked()) {
                     this.openEntry(entry);
                     return true;
                 }
@@ -221,34 +223,6 @@ public class BookCategoryScreen {
 
     }
 
-
-    private EntryDisplayState getEntryDisplayState(BookEntry entry) {
-        var player = this.bookOverviewScreen.getMinecraft().player;
-
-        var isEntryUnlocked = BookUnlockStateManager.get().isUnlockedFor(player, entry);
-
-        var anyParentsUnlocked = false;
-        var allParentsUnlocked = true;
-        for (var parent : entry.getParents()) {
-            if (!BookUnlockStateManager.get().isUnlockedFor(player, parent.getEntry())) {
-                allParentsUnlocked = false;
-            } else {
-                anyParentsUnlocked = true;
-            }
-        }
-
-        if (entry.showWhenAnyParentUnlocked() && !anyParentsUnlocked)
-            return EntryDisplayState.HIDDEN;
-
-        if (!entry.showWhenAnyParentUnlocked() && !allParentsUnlocked)
-            return EntryDisplayState.HIDDEN;
-
-        if (!isEntryUnlocked)
-            return entry.hideWhileLocked() ? EntryDisplayState.HIDDEN : EntryDisplayState.LOCKED;
-
-        return EntryDisplayState.UNLOCKED;
-    }
-
     private void renderEntries(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -260,11 +234,12 @@ public class BookCategoryScreen {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(this.currentZoom, this.currentZoom, 1.0f);
 
+        var player = this.bookOverviewScreen.getMinecraft().player;
         for (var entry : this.category.getEntries().values()) {
-            var displayState = this.getEntryDisplayState(entry);
+            var displayState = entry.getEntryDisplayState(player);
             var isHovered = this.isEntryHovered(entry, xOffset, yOffset, mouseX, mouseY);
 
-            if (displayState == EntryDisplayState.HIDDEN)
+            if (!displayState.isVisible())
                 continue;
 
             int texX = entry.getEntryBackgroundVIndex() * ENTRY_HEIGHT;
@@ -282,7 +257,7 @@ public class BookCategoryScreen {
             //guiGraphics.pose().translate(0, 0, -10); //push the whole entry behind the frame
 
 
-            if (displayState == EntryDisplayState.LOCKED) {
+            if (!displayState.isUnlocked()) {
                 //Draw locked entries greyed out
                 RenderSystem.setShaderColor(0.2F, 0.2F, 0.2F, 1.0F);
             } else if (isHovered) {
@@ -300,7 +275,7 @@ public class BookCategoryScreen {
             guiGraphics.pose().popPose();
 
             //render unread icon
-            if (displayState == EntryDisplayState.UNLOCKED && !BookUnlockStateManager.get().isReadFor(this.bookOverviewScreen.getMinecraft().player, entry)) {
+            if (displayState.isUnlocked() && !BookUnlockStateManager.get().isReadFor(this.bookOverviewScreen.getMinecraft().player, entry)) {
                 final int U = 350;
                 final int V = 19;
                 final int width = 11;
@@ -316,7 +291,7 @@ public class BookCategoryScreen {
                 //testing
                 guiGraphics.pose().pushPose();
                 guiGraphics.pose().translate(0, 0, 11); //and push the unread icon in front of the background and icon (they are at Z 10)
-                //if focused we go to the right of our normal button (instead of down, like mc buttons do)
+                //if focused, we go to the right of our normal button (instead of down, like mc buttons do)
                 BookContentScreen.drawFromTexture(guiGraphics, this.bookOverviewScreen.getBook(),
                         entry.getX() * ENTRY_GRID_SCALE + ENTRY_GAP + 16 + 2,
                         entry.getY() * ENTRY_GRID_SCALE + ENTRY_GAP - 2, U + (isHovered ? width : 0), V, width, height);
@@ -339,8 +314,8 @@ public class BookCategoryScreen {
         float yOffset = this.getYOffset();
 
         for (var entry : this.category.getEntries().values()) {
-            var displayState = this.getEntryDisplayState(entry);
-            if (displayState == EntryDisplayState.HIDDEN)
+            var displayState = entry.getEntryDisplayState(this.bookOverviewScreen.getMinecraft().player);
+            if (!displayState.isVisible())
                 continue;
 
             this.renderTooltip(guiGraphics, entry, displayState, xOffset, yOffset, mouseX, mouseY);
@@ -388,7 +363,7 @@ public class BookCategoryScreen {
         RenderSystem.enableBlend();
 
         for (var parent : entry.getParents()) {
-            var parentDisplayState = this.getEntryDisplayState(parent.getEntry());
+            var parentDisplayState = parent.getEntry().getEntryDisplayState(this.bookOverviewScreen.getMinecraft().player);
             if (parentDisplayState == EntryDisplayState.HIDDEN)
                 continue;
 

@@ -7,14 +7,16 @@
 package com.klikli_dev.modonomicon.data;
 
 import com.klikli_dev.modonomicon.Modonomicon;
-import com.klikli_dev.modonomicon.api.*;
+import com.klikli_dev.modonomicon.api.ModonomiconConstants;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Condition;
 import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Page;
 import com.klikli_dev.modonomicon.api.multiblock.Multiblock;
 import com.klikli_dev.modonomicon.api.multiblock.StateMatcher;
 import com.klikli_dev.modonomicon.api.multiblock.TriPredicate;
 import com.klikli_dev.modonomicon.book.conditions.*;
-import com.klikli_dev.modonomicon.book.entries.*;
+import com.klikli_dev.modonomicon.book.entries.BookEntry;
+import com.klikli_dev.modonomicon.book.entries.CategoryLinkBookEntry;
+import com.klikli_dev.modonomicon.book.entries.ContentBookEntry;
 import com.klikli_dev.modonomicon.book.page.*;
 import com.klikli_dev.modonomicon.multiblock.DenseMultiblock;
 import com.klikli_dev.modonomicon.multiblock.SparseMultiblock;
@@ -90,7 +92,7 @@ public class LoaderRegistry {
         registerConditionLoader(Condition.TRUE, BookTrueCondition::fromJson, BookTrueCondition::fromNetwork);
         registerConditionLoader(Condition.FALSE, BookFalseCondition::fromJson, BookFalseCondition::fromNetwork);
         registerConditionLoader(Condition.MOD_LOADED, BookModLoadedCondition::fromJson, BookModLoadedCondition::fromNetwork);
-        registerConditionLoader(Condition.CATEGORY_HAS_ENTRIES, BookCategoryHasEntriesCondition::fromJson, BookCategoryHasEntriesCondition::fromNetwork);
+        registerConditionLoader(Condition.CATEGORY_HAS_VISIBLE_ENTRIES, BookCategoryHasVisibleEntriesCondition::fromJson, BookCategoryHasVisibleEntriesCondition::fromNetwork);
     }
 
     private static void registerDefaultMultiblockLoaders() {
