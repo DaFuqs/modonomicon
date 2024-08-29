@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [release/v1.20.1-1.75.0] - 2024-08-29
+### :sparkles: New Features
+- [`3e904ff`](https://github.com/klikli-dev/modonomicon/commit/3e904ff572ace59bd339e58ed54a56e14ff9d2cb) - Various improvements around entry unlocks ([#245](https://github.com/klikli-dev/modonomicon/pull/245)) - thanks @DaFuqs *(commit by [@DaFuqs](https://github.com/DaFuqs))*
+
+### :bug: Bug Fixes
+- [`e2f98d3`](https://github.com/klikli-dev/modonomicon/commit/e2f98d38d5a7995d8317e2db874a66332c58f0f2) - add missing import *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+### :wrench: Chores
+- [`c8be6c4`](https://github.com/klikli-dev/modonomicon/commit/c8be6c4728fdb1ac750a5d2b06164e5683f631ad) - reformat *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+
 ## [release/v1.20.1-1.74.1] - 2024-08-12
 ### :bug: Bug Fixes
 - [`8b923e0`](https://github.com/klikli-dev/modonomicon/commit/8b923e0dd9d8f1530d5f832b166e5867efb2f206) - custom font not applied to list bullet points *(commit by [@klikli-dev](https://github.com/klikli-dev))*
@@ -860,3 +871,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [release/v1.20.1-1.73.2]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.73.1...release/v1.20.1-1.73.2
 [release/v1.20.1-1.74.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.73.2...release/v1.20.1-1.74.0
 [release/v1.20.1-1.74.1]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.74.0...release/v1.20.1-1.74.1
+[release/v1.20.1-1.75.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.74.1...release/v1.20.1-1.75.0
