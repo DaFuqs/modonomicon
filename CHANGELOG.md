@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [release/v1.20.1-1.76.0] - 2024-09-08
+### :sparkles: New Features
+- [`0746615`](https://github.com/klikli-dev/modonomicon/commit/07466159212d5a4ee6b96ce6574dd256f042e09d) - add allowOpenBooksWithInvalidLinks *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+### :bug: Bug Fixes
+- [`92cdf26`](https://github.com/klikli-dev/modonomicon/commit/92cdf26816292de4da45faa2ff7658e39f4e6287) - forge demo content exclusion affects dev env *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+### :wrench: Chores
+- [`4dddf1e`](https://github.com/klikli-dev/modonomicon/commit/4dddf1e4cd0e9ef99fe1fffa5f7845af2d8f8741) - run datagen *(commit by [@klikli-dev](https://github.com/klikli-dev))*
+
+
 ## [release/v1.20.1-1.75.0] - 2024-08-29
 ### :sparkles: New Features
 - [`3e904ff`](https://github.com/klikli-dev/modonomicon/commit/3e904ff572ace59bd339e58ed54a56e14ff9d2cb) - Various improvements around entry unlocks ([#245](https://github.com/klikli-dev/modonomicon/pull/245)) - thanks @DaFuqs *(commit by [@DaFuqs](https://github.com/DaFuqs))*
@@ -872,3 +883,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [release/v1.20.1-1.74.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.73.2...release/v1.20.1-1.74.0
 [release/v1.20.1-1.74.1]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.74.0...release/v1.20.1-1.74.1
 [release/v1.20.1-1.75.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.74.1...release/v1.20.1-1.75.0
+[release/v1.20.1-1.76.0]: https://github.com/klikli-dev/modonomicon/compare/release/v1.20.1-1.75.0...release/v1.20.1-1.76.0
