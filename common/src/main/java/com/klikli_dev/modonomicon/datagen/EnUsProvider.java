@@ -40,6 +40,7 @@ public class EnUsProvider extends AbstractModonomiconLanguageProvider {
         this.add(Gui.BUTTON_READ_ALL_TOOLTIP_NONE, "There are currently §lno unread§r unlocked entries.");
 
         this.add(Gui.HOVER_BOOK_LINK, "Go to: %s");
+        this.add(Gui.HOVER_BOOK_LINK_ERROR, "Invalid link: %s. Please contact the author of the book or the translator to fix this. More information can be found in the log with the context \"Failed to parse book link.\".");
         this.add(Gui.HOVER_BOOK_LINK_LOCKED, "%s.\n%s");
         this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO, "You need to unlock this entry before you can open the link!");
         this.add(Gui.HOVER_BOOK_ENTRY_LINK_LOCKED_INFO_HINT, "Hint: The entry is in the Category: %s");

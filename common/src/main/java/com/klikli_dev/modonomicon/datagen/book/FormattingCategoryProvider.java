@@ -122,10 +122,19 @@ public class FormattingCategoryProvider extends CategoryProvider {
                 .withTitle(this.context().pageTitle())
                 .build(); //patchouli link
 
+        this.context().page("invalidLink");
+        var invalidLink = BookTextPageModel.builder()
+                .withTitle(this.context().pageTitle())
+                .withText(this.context().pageText())
+                .build();
+
+        this.lang().add(this.context().pageTitle(), "Invalid Link");
+        this.lang().add(this.context().pageText(), this.format("{0}", this.entryLink("It has an invalid Link", "a_cat", "an_entry")));
+
         return this.entry(location)
                 .withIcon(Items.WRITABLE_BOOK)
                 .withEntryBackground(0, 2)
-                .withPages(page1, page2, page3);
+                .withPages(page1, page2, page3, invalidLink);
     }
 
     private BookEntryModel makeAlwaysLockedEntry(char location) {

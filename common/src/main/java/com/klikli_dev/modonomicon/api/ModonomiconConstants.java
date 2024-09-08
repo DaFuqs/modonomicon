@@ -140,6 +140,7 @@ public class ModonomiconConstants {
             public static final String BUTTON_READ_ALL_TOOLTIP_SHIFT_WARNING = PREFIX + "button.read_all.tooltip.shift_warning";
 
             public static final String HOVER_BOOK_LINK = PREFIX + "hover.book_link";
+            public static final String HOVER_BOOK_LINK_ERROR = PREFIX + "hover.book_link.error";
             public static final String HOVER_BOOK_LINK_LOCKED = PREFIX + "hover.book_link_locked";
             public static final String HOVER_BOOK_ENTRY_LINK_LOCKED_INFO = PREFIX + "hover.book_entry_link_locked_info";
             public static final String HOVER_BOOK_ENTRY_LINK_LOCKED_INFO_HINT = PREFIX + "hover.book_entry_link_locked_info.hint";

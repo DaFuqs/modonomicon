@@ -72,6 +72,12 @@ public class BookModel {
     protected int searchButtonYOffset = 0;
     protected int readAllButtonYOffset = 0;
 
+    /**
+     * If true, invalid links do not show an error screen when opening the book.
+     * Instead, the book and pages will open, but the link will not work.
+     */
+    protected boolean allowOpenBooksWithInvalidLinks = false;
+
     protected BookModel(ResourceLocation id, String name) {
         this.id = id;
         this.name = name;
@@ -166,6 +172,10 @@ public class BookModel {
         return this.bookTextOffsetWidth;
     }
 
+    public boolean allowOpenBooksWithInvalidLinks() {
+        return this.allowOpenBooksWithInvalidLinks;
+    }
+
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("name", this.name);
@@ -197,6 +207,9 @@ public class BookModel {
         if (this.customBookItem != null) {
             json.addProperty("custom_book_item", this.customBookItem.toString());
         }
+        json.addProperty("allow_open_book_with_invalid_links", this.allowOpenBooksWithInvalidLinks);
+
+
         return json;
     }
 
@@ -391,6 +404,16 @@ public class BookModel {
 
     public BookModel withReadAllButtonYOffset(int readAllButtonYOffset) {
         this.readAllButtonYOffset = readAllButtonYOffset;
+        return this;
+    }
+    /**
+     * If true, invalid links do not show an error screen when opening the book.
+     * Instead, the book and pages will open, but the link will not work.
+     *
+     * The main use for this is for mods that have external translators for their books, where translations might be outdated after entries have been removed or moved.
+     */
+    public BookModel withAllowOpenBooksWithInvalidLinks(boolean value) {
+        this.allowOpenBooksWithInvalidLinks = value;
         return this;
     }
 }

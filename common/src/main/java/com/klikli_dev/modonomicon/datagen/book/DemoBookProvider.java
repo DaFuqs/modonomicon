@@ -65,7 +65,9 @@ public class DemoBookProvider extends BookProvider {
                 .withCategory(conditionalCategory)
                 .withCategory(otherCategory)
                 .withCommand(commandEntryCommand)
-                .withCommand(commandEntryLinkCommand);
+                .withCommand(commandEntryLinkCommand)
+                .withAllowOpenBooksWithInvalidLinks(true)
+                ;
         return demoBook;
     }
 

@@ -1,5 +1,5 @@
-// 1.20.1	2024-03-31T16:09:49.7132392	Books: modonomicon
-a30aec89de938ebb9f5e704d5262ad6f43865afd data/modonomicon/modonomicon/books/demo/book.json
+// 1.20.1	2024-09-08T14:26:06.0997457	Books: modonomicon
+53dfc1d823e728360dbe513b9092c00d496462cb data/modonomicon/modonomicon/books/demo/book.json
 20220ba7646d8d8556331b8bbeaf0d2f95f336b9 data/modonomicon/modonomicon/books/demo/categories/conditional.json
 beb829bd9c24d3855aba996e5e08ffd8c5e41ccc data/modonomicon/modonomicon/books/demo/categories/features.json
 5bee6456d3434ccb00d57ce279bc4b384b95fe42 data/modonomicon/modonomicon/books/demo/categories/formatting.json
@@ -25,7 +25,7 @@ c3f689b5d5fe29aa2ec0063ebc78697eab01881f data/modonomicon/modonomicon/books/demo
 26cf6e65105f3be0f29e7dbd606cb17281c4854d data/modonomicon/modonomicon/books/demo/entries/formatting/advanced.json
 820e09ba5a917e1b5b0ceb1806572b0801cfa52f data/modonomicon/modonomicon/books/demo/entries/formatting/always_locked.json
 c4f3f19bb2b68d405c0d43d07460097c814fa1da data/modonomicon/modonomicon/books/demo/entries/formatting/basic.json
-29f6991a4cd6c07f9247182f2f1b4294e3dc8351 data/modonomicon/modonomicon/books/demo/entries/formatting/link.json
+6a35abccb9344c95c9bb60dabcf4a782cad84eb4 data/modonomicon/modonomicon/books/demo/entries/formatting/link.json
 4a0f243b77e13c86c07e8a81ccdac5d62ae54605 data/modonomicon/modonomicon/books/demo/entries/hidden/always_locked.json
 9c5c701eb32476741892891bba1bac3b07fff429 data/modonomicon/modonomicon/books/demo/entries/other/a.json
 4977c930c27884f8f580c7501b0b236686aa007e data/modonomicon/modonomicon/books/demo/entries/other/b.json

@@ -84,6 +84,13 @@ public class Book {
     protected int searchButtonYOffset;
     protected int readAllButtonYOffset;
 
+
+    /**
+     * If true, invalid links do not show an error screen when opening the book.
+     * Instead, the book and pages will open, but the link will not work.
+     */
+    protected boolean allowOpenBooksWithInvalidLinks;
+
     protected Supplier<ItemStack> bookItem = Suppliers.memoize(() -> {
         if (this.customBookItem != null) {
             var parsed = ItemStackUtil.parseItemStackString(this.customBookItem.toString());
@@ -97,12 +104,11 @@ public class Book {
     });
 
     public Book(ResourceLocation id, String name, String tooltip, ResourceLocation model, boolean generateBookItem,
-                ResourceLocation customBookItem, String creativeTab, ResourceLocation font, ResourceLocation bookOverviewTexture, ResourceLocation frameTexture,
+                @Nullable ResourceLocation customBookItem, String creativeTab, ResourceLocation font, ResourceLocation bookOverviewTexture, ResourceLocation frameTexture,
                 BookFrameOverlay topFrameOverlay, BookFrameOverlay bottomFrameOverlay, BookFrameOverlay leftFrameOverlay, BookFrameOverlay rightFrameOverlay,
                 ResourceLocation bookContentTexture, ResourceLocation craftingTexture, ResourceLocation turnPageSound,
                 int defaultTitleColor, float categoryButtonIconScale, boolean autoAddReadConditions, int bookTextOffsetX, int bookTextOffsetY, int bookTextOffsetWidth,
-                int categoryButtonXOffset, int categoryButtonYOffset, int searchButtonXOffset, int searchButtonYOffset, int readAllButtonYOffset
-    ) {
+                int categoryButtonXOffset, int categoryButtonYOffset, int searchButtonXOffset, int searchButtonYOffset, int readAllButtonYOffset, boolean allowOpenBooksWithInvalidLinks) {
         this.id = id;
         this.name = name;
         this.tooltip = tooltip;
@@ -135,6 +141,7 @@ public class Book {
         this.searchButtonXOffset = searchButtonXOffset;
         this.searchButtonYOffset = searchButtonYOffset;
         this.readAllButtonYOffset = readAllButtonYOffset;
+        this.allowOpenBooksWithInvalidLinks = allowOpenBooksWithInvalidLinks;
     }
 
     public static Book fromJson(ResourceLocation id, JsonObject json) {
@@ -184,10 +191,12 @@ public class Book {
         var searchButtonYOffset = GsonHelper.getAsInt(json, "search_button_y_offset", 0);
         var readAllButtonYOffset = GsonHelper.getAsInt(json, "read_all_button_y_offset", 0);
 
+        var allowOpenBooksWithInvalidLinks = GsonHelper.getAsBoolean(json, "allow_open_book_with_invalid_links", false);
+
         return new Book(id, name, tooltip, model, generateBookItem, customBookItem, creativeTab, font, bookOverviewTexture,
                 frameTexture, topFrameOverlay, bottomFrameOverlay, leftFrameOverlay, rightFrameOverlay,
                 bookContentTexture, craftingTexture, turnPageSound, defaultTitleColor, categoryButtonIconScale, autoAddReadConditions, bookTextOffsetX, bookTextOffsetY, bookTextOffsetWidth, categoryButtonXOffset, categoryButtonYOffset,
-                searchButtonXOffset, searchButtonYOffset, readAllButtonYOffset);
+                searchButtonXOffset, searchButtonYOffset, readAllButtonYOffset, allowOpenBooksWithInvalidLinks);
     }
 
 
@@ -227,10 +236,12 @@ public class Book {
         var searchButtonYOffset = (int) buffer.readShort();
         var readAllButtonYOffset = (int) buffer.readShort();
 
+        var allowOpenBooksWithInvalidLinks = buffer.readBoolean();
+
         return new Book(id, name, tooltip, model, generateBookItem, customBookItem, creativeTab, font, bookOverviewTexture,
                 frameTexture, topFrameOverlay, bottomFrameOverlay, leftFrameOverlay, rightFrameOverlay,
                 bookContentTexture, craftingTexture, turnPageSound, defaultTitleColor, categoryButtonIconScale, autoAddReadConditions, bookTextOffsetX, bookTextOffsetY, bookTextOffsetWidth, categoryButtonXOffset, categoryButtonYOffset,
-                searchButtonXOffset, searchButtonYOffset, readAllButtonYOffset);
+                searchButtonXOffset, searchButtonYOffset, readAllButtonYOffset, allowOpenBooksWithInvalidLinks);
     }
 
     /**
@@ -305,6 +316,8 @@ public class Book {
         buffer.writeShort(this.searchButtonXOffset);
         buffer.writeShort(this.searchButtonYOffset);
         buffer.writeShort(this.readAllButtonYOffset);
+
+        buffer.writeBoolean(this.allowOpenBooksWithInvalidLinks);
     }
 
     public ItemStack getBookItem() {
@@ -462,5 +475,8 @@ public class Book {
 
     public int getReadAllButtonYOffset() {
         return this.readAllButtonYOffset;
+    }
+    public boolean allowOpenBooksWithInvalidLinks() {
+        return this.allowOpenBooksWithInvalidLinks;
     }
 }
