@@ -125,8 +125,9 @@ tasks.named("sourcesJar", Jar) {
 
 tasks.named('jar') {
     archiveClassifier = "slim"
-    processResources.exclude("**/data/modonomicon/modonomicon/books/**")
-    processResources.exclude("**/data/modonomicon/modonomicon/multiblocks/**")
+    //here we cannot exclude, otherwise we don't have them in our dev env runs.
+//    processResources.exclude("**/data/modonomicon/modonomicon/books/**")
+//    processResources.exclude("**/data/modonomicon/modonomicon/multiblocks/**")
     finalizedBy('reobfJar')
 }
 
